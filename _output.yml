@@ -16,5 +16,6 @@ bookdown::pdf_book:
   keep_tex: yes
 bookdown::epub_book: default
 bookdown::bs4_book: default
+output_dir: "docs"
 
 
