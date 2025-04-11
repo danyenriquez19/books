@@ -1,5 +1,22 @@
-book_filename: "bookdown-demo"
+book_filename: "Analisis-Consumo-Agua"
 language:
   ui:
-    chapter_name: "Chapter "
-delete_merged_file: true
+    chapter_name: "Capítulo "
+    appendix_name: "Apéndice "
+    toc: "Tabla de contenido"
+    references: "Referencias"
+    search: "Buscar"
+  label:
+    fig: "Figura "
+    tab: "Tabla "
+    eq: "Ecuación "
+    thm: "Teorema "
+    lem: "Lema "
+    cor: "Corolario "
+    prp: "Proposición "
+    cnj: "Conjetura "
+    def: "Definición "
+    exm: "Ejemplo "
+    exr: "Ejercicio "
+    proof: "Demostración"
+
