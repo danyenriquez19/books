@@ -18,4 +18,3 @@ bookdown::epub_book: default
 bookdown::bs4_book: default
 output_dir: "docs"
 
-

@@ -19,4 +19,9 @@ language:
     exm: "Ejemplo "
     exr: "Ejercicio "
     proof: "Demostración"
+delete_merged_file: true
 
+rmd_files:
+  - "index.Rmd"
+  - "EDA.Rmd"
+  - "06-references.Rmd"

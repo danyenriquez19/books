@@ -1,0 +1,462 @@
+# Analisis Exploratorio de Datos
+
+```{r, echo=FALSE}
+data<-read.csv2("data/swm_trialA_1K.csv")
+```
+
+```{r diccionario-tabla, echo=FALSE, warning=FALSE}
+library(knitr)
+
+kable(
+  data.frame(
+    Variable = c("user.key", "datetime", "meter.reading", "diff"),
+    Descripción = c(
+      "Llave de usuario que permite identificar al usuario.",
+      "Fecha y hora en que el medidor realizó la lectura.",
+      "Lectura acumulada del consumo en metros cúbicos.",
+      "Diferencia de consumo respecto a la medición anterior."
+    )
+  ),
+  caption = "Diccionario de variables de la serie de consumo."
+)
+```
+## Rango de las Mediciones
+
+
+primeros 5 registros.
+
+```{r, echo=FALSE}
+head(data, 5)
+```
+
+últimos 5 registros
+
+```{r, echo=FALSE}
+tail(data, 5)
+```
+
+El análisis de los datos revela que los registros fueron tomados en intervalos de una hora. El período de recopilación abarca desde el año 2015 hasta 2017 y ya se han calculado la diferencia en los consumos.
+
+## Valores Faltantes
+
+```{r, echo=FALSE}
+
+nulos<-sum(is.na(data))
+cat("la base de datos cuenta con ",nulos,"valores faltantes" )
+
+```
+## Conteo de Usuarios
+
+```{r, echo=FALSE}
+usuarios<- length(unique(data$user.key))
+cat("se tiene un registro de ", usuarios, "usuarios")
+```
+## Formato de las variables
+
+```{r, echo=FALSE}
+sapply(data, class)
+```
+
+podemos observar que la variable "datetime" no esta en formato de fecha.
+
+```{r, echo=FALSE}
+# Convertir a formato de fecha y hora
+data$datetime <- as.POSIXct(data$datetime, format = "%d/%m/%Y %H:%M:%S")
+
+```
+
+## Selección de Usuario
+
+Como se puede observar, existen múltiples series de tiempo asociadas a cada usuario en el registro. Para simplificar el análisis y los temas tratados en este trabajo, se seleccionará un usuario de manera aleatoria. Este usuario servirá como base para desarrollar los análisis y conclusiones que se presentarán en las siguientes secciones.
+
+```{r, echo=FALSE}
+set.seed(123)
+usuario_aleatorio <- sample(unique(data$user.key), 1)
+cat("El usuario seleccionado al azar es:", usuario_aleatorio)
+```
+
+```{r,echo=FALSE}
+df<-data[data$user.key == usuario_aleatorio,]
+head(df,5)
+```
+```{r, echo=FALSE}
+tail(df, 5)
+```
+
+
+## Estadisticas Descriptivas
+
+Para nuestro análisis descriptivo tendremos en cuenta la variable 'diff' ya que representa el consumo realizado en determinada hora por el medidor.
+
+```{r, echo=FALSE, warning=FALSE}
+media<-mean(df$diff)
+mediana<-median(df$diff)
+deves<- sd(df$diff)
+minimo<-min(df$diff)
+maximo<-max(df$diff)
+rango<- maximo-minimo
+cv<-(deves/media)*100
+Q1<-quantile(df$diff,0.25)
+Q2<-quantile(df$diff,0.5)
+Q3<-quantile(df$diff,0.75)
+
+kable(
+  data.frame(
+    Variable = c("media", "mediana", "desv. estandar", "Minimo","Maximo","Rango", "Coef. Variacion", "Q1","Q2","Q3"),
+    Descripción = c(
+      media, mediana,deves,minimo,maximo,rango,cv,Q1,Q2,Q3
+    )
+  ),
+  caption = "Estadisticas Descriptivas de la variable diff para el usuario seleccionado."
+)
+```
+
+Se observa la presencia de valores negativos en el consumo de ciertas horas lo cual se puede interpretar como un error ya que por el contexto del problema el valor mínimo consumido por horas es cero.
+
+## Casos de Valores Negativos
+
+```{r, echo=FALSE}
+negativos<-df[df$diff<0,]
+negativos
+```
+
+podemos observar que solo son dos los registros que presentan valores negativos por lo que los imputaremos con el valor cero.
+
+```{r, echo=FALSE}
+df[df$diff<0,]<-0
+```
+
+comprobamos la imputación
+
+```{r, echo=FALSE}
+count<-sum(df$diff<0)
+count
+```
+Se adicionara el consumo por año
+
+```{r, echo=FALSE, warning=FALSE,message=FALSE}
+library(kableExtra)
+library(dplyr)
+tabla_resumen <- df %>%
+  mutate(anio = format(datetime, "%Y")) %>%
+  filter(anio %in% c("2015", "2016", "2017")) %>%
+  group_by(anio) %>%
+  summarise(
+    promedio_consumo = mean(diff, na.rm = TRUE),
+    varianza_consumo = var(diff, na.rm = TRUE)
+  )
+
+tabla_resumen %>%
+  kable(digits = 2, caption = "Promedio y Varianza del Consumo por Año") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"))
+
+```
+
+## Resumen Analisis Estadistico
+
+Se observa que el consumo de agua presenta una notable variabilidad y numerosos valores atípicos. El rango de consumo oscila entre 0 y 2152 metros cúbicos por hora. Sin embargo, el valor promedio general se encuentra alrededor de los 33 metros cúbicos, lo cual sugiere que, aunque existen registros extremos de consumo, la mayoría de los valores se concentran en niveles mucho más bajos. Esta disparidad podría indicar posibles irregularidades en los datos o un comportamiento inconsistente en el consumo de agua.
+
+## Analisis Grafico
+
+En este apartado analizaremos los diferentes comportamientos de la variable "diff" en el tiempo, haciendo uso de gráfico.
+
+**Boxplot**
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+ggplot(df,aes(x="", y= df$diff))+geom_boxplot(fill="darkblue", color = "lightblue")+ labs(x="", y= "consumo(diff)")+ theme_minimal()
+
+```
+
+**Consumo Anual**
+
+```{r,echo=FALSE}
+df<- df %>% mutate(anio= year(datetime))
+ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
+```
+
+
+observamos que en los diferentes registros se encuentran algunos que datan del año 1969 lo cual puede deberse a un error en la recopilación de los datos.Por consiguiente realizaremos eliminaremos estos registros.
+
+
+```{r, echo=FALSE}
+# Filtrar registros con año menor a 2015
+eliminar<-df %>%
+  filter(year(datetime) < 2015)
+eliminar
+```
+
+```{r, echo=FALSE}
+df <- df %>% filter(year(datetime)>= 2015) 
+df<- df %>% mutate(anio= year(datetime))
+ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
+```
+
+
+```{r, echo=FALSE, warning=FALSE,message=FALSE}
+library(kableExtra)
+library(dplyr)
+library(knitr)
+
+# Calcular los valores atípicos por año usando dplyr:: prefijos
+outliers_por_anio <- df %>%
+  group_by(anio) %>%
+  dplyr::mutate(
+    Q1 = quantile(diff, 0.25, na.rm = TRUE),
+    Q3 = quantile(diff, 0.75, na.rm = TRUE),
+    IQR = Q3 - Q1,
+    es_outlier = diff < (Q1 - 1.5 * IQR) | diff > (Q3 + 1.5 * IQR)
+  ) %>%
+  dplyr::summarise(
+    total = n(),
+    outliers = sum(es_outlier, na.rm = TRUE),
+    porcentaje = round(100 * outliers / total, 2),
+    .groups = "drop"
+  )
+
+#Mostrar tabla con kable
+kable(outliers_por_anio,
+      caption = "Valores Atípicos por Año", 
+      format = "markdown")
+
+```
+
+
+
+
+## Serie de Tiempo
+
+**Consumo General**
+
+```{r,echo=FALSE}
+#install.packages("zoo")
+#install.packages("plotly")
+library(zoo)
+library(plotly)
+
+
+plot_ly(
+  data = df,
+  x = ~datetime,
+  y = ~diff,
+  type = 'scatter',
+  mode = 'lines',
+  line = list(color = 'steelblue')
+) %>%
+  layout(
+    title = "Serie de Tiempo del Consumo de Agua",
+    xaxis = list(title = "Fecha"),
+    yaxis = list(title = "Consumo de Agua (m3/h)")
+  )
+           
+
+```
+
+**Consumo anual**
+
+
+
+
+```{r,echo=FALSE}
+library(plotly)
+library(dplyr)
+
+df$year <- format(df$datetime, "%Y")
+df$month <- format(df$datetime, "%m")
+
+# Generar los gráficos por año
+plots_por_ano <- df %>%
+  group_by(year) %>%
+  group_split() %>%
+  lapply(function(sub_df) {
+    plot_ly(sub_df, x = ~datetime, y = ~diff, type = 'scatter', mode = 'lines',
+            name = unique(sub_df$year))
+  })
+
+# Crear el subplot
+fig <- subplot(plots_por_ano, nrows = length(plots_por_ano),
+               shareX = FALSE, shareY = TRUE, titleY = TRUE)
+
+# Agregar el layout general
+fig <- fig %>%
+  layout(
+    title = list(text = "Consumo de Agua por Año (Mes a Mes)", x = 0.5),
+    xaxis = list(title = "Fecha"),
+    yaxis = list(title = "Consumo de Agua (m³/h)"),
+    annotations = list(
+      list(
+        text = "Consumo de Agua por Año (Mes a Mes)",
+        x = 0.5,
+        y = 1.05,
+        xref = "paper",
+        yref = "paper",
+        showarrow = FALSE,
+        font = list(size = 16)
+      )
+    )
+  )
+
+fig
+
+
+```
+
+## Resultados Analisis Grafico
+
+* Se observa la presencia de consumos elevados, lo cual se ve reflejado en la existencia de múltiples valores atípicos que sobresalen del comportamiento general de la serie.
+
+* La serie presenta picos de consumo significativamente altos, evidenciando una variabilidad considerable y la presencia de numerosos valores atípicos que podrían estar asociados a eventos específicos o errores de medición.
+
+* A través de los años se observa que los consumos por mes van disminuyendo.
+
+## Medias Moviles 
+
+Dado que los registros de consumo de agua se han tomado en intervalos de una hora, se ha decidido utilizar un parámetro de k=24 para las medias móviles, lo que corresponde a un promedio de 24 horas, es decir, un promedio diario. Esta elección permite suavizar las fluctuaciones horarias y capturar las tendencias generales del consumo de agua a lo largo de cada día. De este modo, se obtiene una representación más clara y coherente del comportamiento del consumo en el tiempo, eliminando los efectos de variaciones momentáneas que podrían ser causadas por fluctuaciones o eventos aislados
+
+```{r,echo=FALSE}
+df$movil_24 <- zoo::rollmean(df$diff, k = 24, fill = NA, align = "right")
+plot_ly(df, x = ~datetime) %>%
+  add_lines(y = ~diff, name = "Serie Original", line = list(color = 'gray')) %>%
+  add_lines(y = ~movil_24, name = "Media Móvil (24 horas)", line = list(color = 'blue')) %>%
+  layout(
+    title = "Consumo de Agua y Media Móvil (24 horas)",
+    xaxis = list(title = "Fecha"),
+    yaxis = list(title = "Consumo de Agua (m3/h)"),
+    legend = list(x = 0.1, y = 0.9)
+  )
+
+```
+
+A partir del gráfico de medias móviles (calculadas como promedios diarios utilizando un intervalo de 24 horas), se observa que el comportamiento general de la serie de consumo se mantiene relativamente estable a lo largo del tiempo. Sin embargo, se identifican dos fechas con variaciones atípicas significativas: el 21 de abril de 2015 y el 30 de diciembre de 2016, en las cuales se registran picos inusuales en el consumo.
+
+## Rezagos
+
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+df <- df %>%
+  mutate(lag_1 = lag(diff, 1))
+ggplot(df, aes(x = lag_1, y = diff)) +
+  geom_point() +
+  labs(title = "Relación entre el consumo actual y el rezago de 1",
+       x = "Consumo de Agua - Rezago 1",
+       y = "Consumo de Agua Actual") +
+  theme_minimal()
+
+```
+
+
+Se observa una clara concentración de puntos en los valores bajos de consumo, lo que indica que la mayoría de las observaciones corresponden a registros con bajo consumo horario. Además, la relación entre el consumo actual y su rezago de una hora no presenta un patrón lineal evidente. Esta falta de linealidad sugiere que no es posible realizar predicciones precisas basadas únicamente en el valor rezagado.
+
+## Estacionalidad
+
+Dado que los registros de los medidores se realizaron de forma horaria desde el 1 de enero de 2015 hasta el 19 de mayo de 2017, es necesario definir adecuadamente el periodo sobre el cual se analizará la estacionalidad, con el fin de identificar posibles patrones recurrentes. No se optó por un análisis mensual, ya que el último mes de la serie no está completo. Además, dado el alto nivel de detalle de los datos (una observación por hora), trabajar a nivel diario u horario podría dificultar la visualización de patrones estacionales debido a la gran cantidad de observaciones. Por esta razón, se decidió realizar el análisis de estacionalidad a nivel semanal.
+
+
+```{r,echo=FALSE, warning=FALSE,message=FALSE}
+#install.packages("forecast")
+library(dplyr)
+library(lubridate)
+library(forecast)
+
+# Recorta hasta el último domingo completo antes del 19 de mayo de 2017
+fecha_max <- as.Date("2017-05-19")
+fecha_fin <- fecha_max - wday(fecha_max) + 1  
+df_truncado <- df %>% 
+  filter(as.Date(datetime) <= fecha_fin)
+# truncar la serie
+df_semanal <- df_truncado %>%
+  mutate(semana = floor_date(datetime, "week")) %>%
+  group_by(semana) %>%
+  summarise(consumo_semanal = sum(diff, na.rm = TRUE)) %>%
+  ungroup()
+# crear la serie
+serie_semanal <- ts(df_semanal$consumo_semanal, 
+                    start = c(2015, 1), 
+                    frequency = 52)
+# graficar la serie
+ggseasonplot(serie_semanal,
+             year.labels = TRUE, 
+             year.labels.left = TRUE,
+             col = rainbow(10),
+             main = "Estacionalidad Semanal por Año",
+             ylab = "Consumo (m3/h)", 
+             xlab = "Semana")
+```
+
+El gráfico de estacionalidad muestra el comportamiento mensual del consumo de agua para los años 2015, 2016 y 2017. Se observa una cierta regularidad en los años 2015 y 2016, lo que indica un patrón estacional moderado. Sin embargo, en 2017 se detecta una fuerte caída en el mes de mayo, lo que rompe el patrón observado en años anteriores y sugiere una posible anomalía o cambio en la dinámica del consumo.
+
+## Autocorrelaciones
+
+Se realizará un análisis de autocorrelación y autocorrelación parcial con el objetivo de evaluar si los valores pasados influyen significativamente en los valores futuros de la serie. Este análisis permitirá identificar la presencia de dependencias temporales que puedan ser útiles para la modelación y predicción del comportamiento del consumo.
+
+```{r}
+
+acf(serie_semanal, main = "Autocorrelación del Consumo Semanal")
+
+pacf(serie_semanal, main = "Autocorrelación Parcial del Consumo Semanal")
+
+```
+
+Se realizó el análisis de autocorrelación (ACF) del consumo semanal para evaluar la dependencia temporal entre observaciones. Los resultados muestran una fuerte autocorrelación positiva en los primeros lags, lo que indica que los valores de consumo de una semana están significativamente influenciados por los valores de semanas anteriores. La autocorrelación disminuye de manera progresiva, pero se mantiene significativa hasta aproximadamente 15 semanas, lo que sugiere una estructura persistente en el consumo a lo largo del tiempo.
+
+
+# Prepocesamiento de Datos
+
+## Descomposicion de la Serie
+
+Dada la variabilidad en los niveles de la serie y la presencia de una estacionalidad cuya amplitud cambia en función del tiempo, se optó por aplicar una descomposición multiplicativa. Para ello, se realizó una transformación logarítmica previa sobre la serie, lo que permite utilizar un enfoque aditivo con el método stl(), manteniendo así la naturaleza multiplicativa de los componentes al interpretar los resultados en la escala original.
+
+**verificacion de ceros en la serie**
+
+```{r, echo=FALSE}
+# Ver cuántos ceros hay
+sum(serie_semanal == 0, na.rm = TRUE)
+
+# Ver cuántos valores negativos hay
+sum(serie_semanal < 0, na.rm = TRUE)
+
+```
+
+
+  
+```{r, echo=FALSE}
+# serie por semana
+serie_log<-log(serie_semanal)
+descomposicion <- stl(serie_log,s.window = "periodic")
+plot(descomposicion)
+```
+
+Se observa una estacionalidad bien definida en la serie, lo que indica patrones recurrentes a lo largo del tiempo. En cuanto a la tendencia, se aprecia una disminución progresiva del consumo semanal hasta aproximadamente mediados del año 2016, momento en el que la serie parece estabilizarse. Esta variación en la tendencia sugiere que la media no se mantiene constante, lo cual indica que la serie no es estacionaria en media. Además, los residuos presentan picos pronunciados, lo que evidencia la presencia de valores atípicos y posibles cambios en la varianza a lo largo del tiempo.
+
+## Estacionariedad
+
+Para validar lo anteriormente expuesto, realizaremos la prueba de Dickey-Fuller
+
+```{r,warning=FALSE,message=FALSE,echo=FALSE}
+library(tseries)
+adf.test(serie_semanal)  
+
+```
+ 
+En este sentido se valida el hecho de que la serie no es estacionaria, es decir, no presenta media, varianza y covarianza constante.
+
+## Resultados de la Descomposicion y Estacionariedad
+
+A partir de lo observado, se concluye que es necesaria una transformación para estabilizar tanto la media como la varianza de la serie temporal [@hyndman2021forecasting]. Por ello, se aplicará una transformación logarítmica con el fin de reducir la variabilidad, seguida de una diferenciación para eliminar la tendencia y lograr una media más constante en el tiempo.
+
+**Primera Diferenciación**
+
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
+library(tseries)
+serie_log_diff <- diff(serie_log)
+plot(serie_log_diff, main = "Serie Logarítmica Diferenciada")
+descomposicion_1<- stl(serie_log_diff,s.window = "periodic")
+plot(descomposicion_1)
+adf.test(serie_log_diff,alternative = "stationary")
+```
+
+En este caso al diferenciar la serie una vez se verifica la estacionariedad.
+
+
