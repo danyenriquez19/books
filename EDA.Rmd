@@ -1,8 +1,16 @@
 # Analisis Exploratorio de Datos
 
+## Selección de Usuario
+
+Ya que en la base de datos existen múltiples series de tiempo asociadas a cada usuario en el registro. Para simplificar el análisis y los temas tratados en este trabajo, se seleccionará un usuario de manera aleatoria. Este usuario servirá como base para desarrollar los análisis y conclusiones que se presentarán en las siguientes secciones.
+
+El usuario selccionado al azar tiene user.key 4f7729cf-f0fc-4333-bea7-4ee4aeaaa246
+
 ```{r, echo=FALSE}
-data<-read.csv2("data/swm_trialA_1K.csv")
+data<-read.csv2("usuario_aleatorio.csv")
 ```
+
+
 
 ```{r diccionario-tabla, echo=FALSE, warning=FALSE}
 library(knitr)
@@ -45,12 +53,7 @@ nulos<-sum(is.na(data))
 cat("la base de datos cuenta con ",nulos,"valores faltantes" )
 
 ```
-## Conteo de Usuarios
 
-```{r, echo=FALSE}
-usuarios<- length(unique(data$user.key))
-cat("se tiene un registro de ", usuarios, "usuarios")
-```
 ## Formato de las variables
 
 ```{r, echo=FALSE}
@@ -63,24 +66,6 @@ podemos observar que la variable "datetime" no esta en formato de fecha.
 # Convertir a formato de fecha y hora
 data$datetime <- as.POSIXct(data$datetime, format = "%d/%m/%Y %H:%M:%S")
 
-```
-
-## Selección de Usuario
-
-Como se puede observar, existen múltiples series de tiempo asociadas a cada usuario en el registro. Para simplificar el análisis y los temas tratados en este trabajo, se seleccionará un usuario de manera aleatoria. Este usuario servirá como base para desarrollar los análisis y conclusiones que se presentarán en las siguientes secciones.
-
-```{r, echo=FALSE}
-set.seed(123)
-usuario_aleatorio <- sample(unique(data$user.key), 1)
-cat("El usuario seleccionado al azar es:", usuario_aleatorio)
-```
-
-```{r,echo=FALSE}
-df<-data[data$user.key == usuario_aleatorio,]
-head(df,5)
-```
-```{r, echo=FALSE}
-tail(df, 5)
 ```
 
 
@@ -111,27 +96,8 @@ kable(
 )
 ```
 
-Se observa la presencia de valores negativos en el consumo de ciertas horas lo cual se puede interpretar como un error ya que por el contexto del problema el valor mínimo consumido por horas es cero.
+El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal.
 
-## Casos de Valores Negativos
-
-```{r, echo=FALSE}
-negativos<-df[df$diff<0,]
-negativos
-```
-
-podemos observar que solo son dos los registros que presentan valores negativos por lo que los imputaremos con el valor cero.
-
-```{r, echo=FALSE}
-df[df$diff<0,]<-0
-```
-
-comprobamos la imputación
-
-```{r, echo=FALSE}
-count<-sum(df$diff<0)
-count
-```
 Se adicionara el consumo por año
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
@@ -178,22 +144,7 @@ df<- df %>% mutate(anio= year(datetime))
 ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
 ```
 
-
-observamos que en los diferentes registros se encuentran algunos que datan del año 1969 lo cual puede deberse a un error en la recopilación de los datos.Por consiguiente realizaremos eliminaremos estos registros.
-
-
-```{r, echo=FALSE}
-# Filtrar registros con año menor a 2015
-eliminar<-df %>%
-  filter(year(datetime) < 2015)
-eliminar
-```
-
-```{r, echo=FALSE}
-df <- df %>% filter(year(datetime)>= 2015) 
-df<- df %>% mutate(anio= year(datetime))
-ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
-```
+se observa una gran presencia de registros atipicos por cada uno de los años registrados.
 
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
@@ -231,7 +182,7 @@ kable(outliers_por_anio,
 
 **Consumo General**
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 #install.packages("zoo")
 #install.packages("plotly")
 library(zoo)
