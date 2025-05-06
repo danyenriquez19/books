@@ -25,3 +25,5 @@ rmd_files:
   - "index.Rmd"
   - "EDA.Rmd"
   - "06-references.Rmd"
+output_dir: "docs"
+
