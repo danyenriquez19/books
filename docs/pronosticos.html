@@ -229,7 +229,7 @@ div.csl-indent {
 <div id="metodólogia-holter-winter" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Metodólogia Holter Winter<a href="pronosticos.html#metodólogia-holter-winter" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.</p>
-<p>Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
+<p>Cabe resaltar que esta metodología <span class="citation">(<a href="#ref-HurtadoGarzon2013">Hurtado Garzón 2013</a>)</span> no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
 <pre><code>## RMSE: 0.7559494</code></pre>
 <p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
@@ -254,6 +254,12 @@ div.csl-indent {
 <p>No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.</p>
 <p>En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.</p>
 
+</div>
+</div>
+<h3>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-HurtadoGarzon2013" class="csl-entry">
+Hurtado Garzón, Lizette Juliana. 2013. <span>“Aplicación de Metodologías ARIMA y Holt-Winters En La Valoración Del Pasivo Contingente de Proyectos de Infraestructura Vial Desarrollados Bajo Esquemas de Participación Público-Privada.”</span> Proyecto de grado. Universidad de los Andes. <a href="https://repositorio.uniandes.edu.co/bitstreams/6ab918dc-dc2d-4ee4-85d7-ee139f7d195c/download">https://repositorio.uniandes.edu.co/bitstreams/6ab918dc-dc2d-4ee4-85d7-ee139f7d195c/download</a>.
 </div>
 </div>
             </section>
