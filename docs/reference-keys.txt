@@ -21,3 +21,6 @@ prepocesamiento-de-datos
 descomposicion-de-la-serie
 estacionariedad
 resultados-de-la-descomposicion-y-estacionariedad
+pronosticos
+metodólogia-holter-winter
+analisis-de-los-residuos

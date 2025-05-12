@@ -387,7 +387,7 @@ Para validar lo anteriormente expuesto, realizaremos la prueba de Dickey-Fuller
 
 ```{r,warning=FALSE,message=FALSE,echo=FALSE}
 library(tseries)
-adf.test(serie_semanal)  
+adf.test(serie_log)  
 
 ```
  
@@ -410,4 +410,114 @@ adf.test(serie_log_diff,alternative = "stationary")
 
 En este caso al diferenciar la serie una vez se verifica la estacionariedad.
 
+# Pronosticos
+
+## Metodólogia Holter Winter 
+
+Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.
+
+Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.
+
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+library(forecast)
+
+# Parámetros
+h <- 10  # tamaño del conjunto de prueba
+n <- length(serie_log)
+
+# Dividir manualmente con índices
+serie_train <- serie_log[1:(n - h)]
+serie_test  <- serie_log[(n - h + 1):n]
+
+# Convertir el conjunto de entrenamiento en ts
+serie_train_ts <- ts(serie_train, start = start(serie_log), frequency = 52)
+
+# Ajustar el modelo de Holt-Winters
+modelo_hw <- HoltWinters(serie_train_ts)
+
+# Predecir
+predicciones <- forecast(modelo_hw, h = h)
+
+# Comparar con test
+comparacion <- data.frame(
+  Real = as.numeric(serie_test),
+  Predicho = as.numeric(predicciones$mean)
+)
+
+# Calcular RMSE
+rmse <- sqrt(mean((comparacion$Real - comparacion$Predicho)^2))
+cat("RMSE:", rmse, "\n")
+
+# Crear serie ts para los valores reales de test con la frecuencia adecuada
+start_test <- time(serie_train_ts)[length(serie_train_ts)] + 1 / frequency(serie_train_ts)
+serie_test_ts <- ts(serie_test, start = start_test, frequency = 52)
+
+# Gráfico
+plot(predicciones, main = "Predicción vs valores reales")
+lines(serie_test_ts, col = "red", type = "o")
+legend("topleft", legend = c("Predicción", "Real"), col = c("blue", "red"), lty = 1)
+
+
+
+
+```
+
+## Analisis de los Residuos
+
+Examinaremos los residuos del modelo para evaluar si este ha logrado capturar adecuadamente la estructura subyacente de la serie temporal.
+
+**QQ-plot**
+
+```{r,echo=FALSE}
+residuos<- residuals(modelo_hw)
+qqnorm(residuos)
+qqline(residuos, col = "red")
+
+```
+
+Se observa 
+
+**Prueba de Shapiro-Wilks**
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# Realizar la prueba de normalidad de Shapiro-Wilk
+shapiro_test <- shapiro.test(residuos)
+print(shapiro_test)
+
+```
+
+Los residuos no siguen una distribución Normal.
+
+
+**Autocorrelacion**
+
+```{r,echo=FALSE}
+# Graficar la función de autocorrelación de los residuos
+acf(residuos, main = "Autocorrelación de los residuos")
+
+```
+
+El gráfico ACF de los residuos muestra que no hay autocorrelaciones significativas en los rezagos. Esto sugiere que los residuos son independientes en el tiempo, y por tanto, que el modelo ha logrado capturar adecuadamente la estructura temporal de la serie.
+
+**Homocedasticidad** varianza constante
+
+```{r,echo=FALSE}
+# Convertir a vectores simples
+valores_ajustados <- as.numeric(modelo_hw$fitted[,1])
+residuos_simples <- as.numeric(residuos)
+
+# Graficar sin etiquetas de fecha
+plot(valores_ajustados, residuos_simples,
+     main = "Residuos vs Valores ajustados",
+     xlab = "Valores ajustados", ylab = "Residuos",
+     pch = 20, cex = 0.6)  # Puntos más pequeños
+abline(h = 0, col = "red")
+
+
+```
+
+No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.
+
+En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.
 
