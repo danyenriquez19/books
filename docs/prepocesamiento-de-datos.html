@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
-  <meta name="description" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <title>Capítulo 3 Prepocesamiento de Datos | ARIMA</title>
+  <meta name="description" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta property="og:title" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta name="twitter:title" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
   
   
   
@@ -183,14 +183,16 @@ div.csl-indent {
 <li class="chapter" data-level="2.3" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-faltantes"><i class="fa fa-check"></i><b>2.3</b> Valores Faltantes</a></li>
 <li class="chapter" data-level="2.4" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#formato-de-las-variables"><i class="fa fa-check"></i><b>2.4</b> Formato de las variables</a></li>
 <li class="chapter" data-level="2.5" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estadisticas-descriptivas"><i class="fa fa-check"></i><b>2.5</b> Estadisticas Descriptivas</a></li>
-<li class="chapter" data-level="2.6" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resumen-analisis-estadistico"><i class="fa fa-check"></i><b>2.6</b> Resumen Analisis Estadistico</a></li>
-<li class="chapter" data-level="2.7" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#analisis-grafico"><i class="fa fa-check"></i><b>2.7</b> Analisis Grafico</a></li>
-<li class="chapter" data-level="2.8" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#serie-de-tiempo"><i class="fa fa-check"></i><b>2.8</b> Serie de Tiempo</a></li>
-<li class="chapter" data-level="2.9" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resultados-analisis-grafico"><i class="fa fa-check"></i><b>2.9</b> Resultados Analisis Grafico</a></li>
-<li class="chapter" data-level="2.10" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#medias-moviles"><i class="fa fa-check"></i><b>2.10</b> Medias Moviles</a></li>
-<li class="chapter" data-level="2.11" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rezagos"><i class="fa fa-check"></i><b>2.11</b> Rezagos</a></li>
-<li class="chapter" data-level="2.12" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estacionalidad"><i class="fa fa-check"></i><b>2.12</b> Estacionalidad</a></li>
-<li class="chapter" data-level="2.13" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#autocorrelaciones"><i class="fa fa-check"></i><b>2.13</b> Autocorrelaciones</a></li>
+<li class="chapter" data-level="2.6" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-negativos"><i class="fa fa-check"></i><b>2.6</b> Valores Negativos</a></li>
+<li class="chapter" data-level="2.7" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#imputar-valores-negativos"><i class="fa fa-check"></i><b>2.7</b> Imputar Valores Negativos</a></li>
+<li class="chapter" data-level="2.8" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resumen-analisis-estadistico"><i class="fa fa-check"></i><b>2.8</b> Resumen Analisis Estadistico</a></li>
+<li class="chapter" data-level="2.9" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#analisis-grafico"><i class="fa fa-check"></i><b>2.9</b> Analisis Grafico</a></li>
+<li class="chapter" data-level="2.10" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#serie-de-tiempo"><i class="fa fa-check"></i><b>2.10</b> Serie de Tiempo</a></li>
+<li class="chapter" data-level="2.11" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resultados-analisis-grafico"><i class="fa fa-check"></i><b>2.11</b> Resultados Analisis Grafico</a></li>
+<li class="chapter" data-level="2.12" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#medias-moviles"><i class="fa fa-check"></i><b>2.12</b> Medias Moviles</a></li>
+<li class="chapter" data-level="2.13" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rezagos"><i class="fa fa-check"></i><b>2.13</b> Rezagos</a></li>
+<li class="chapter" data-level="2.14" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estacionalidad"><i class="fa fa-check"></i><b>2.14</b> Estacionalidad</a></li>
+<li class="chapter" data-level="2.15" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#autocorrelaciones"><i class="fa fa-check"></i><b>2.15</b> Autocorrelaciones</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html"><i class="fa fa-check"></i><b>3</b> Prepocesamiento de Datos</a>
 <ul>
@@ -203,7 +205,14 @@ div.csl-indent {
 <li class="chapter" data-level="4.1" data-path="pronosticos.html"><a href="pronosticos.html#metodólogia-holter-winter"><i class="fa fa-check"></i><b>4.1</b> Metodólogia Holter Winter</a></li>
 <li class="chapter" data-level="4.2" data-path="pronosticos.html"><a href="pronosticos.html#analisis-de-los-residuos"><i class="fa fa-check"></i><b>4.2</b> Analisis de los Residuos</a></li>
 </ul></li>
+<<<<<<< HEAD
 <li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a></li>
+=======
+<li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelo-arima"><i class="fa fa-check"></i><b>5.1</b> Modelo ARIMA</a></li>
+</ul></li>
+>>>>>>> b759291 (Renderizado actualizado del libro)
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -217,7 +226,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ARIMA</a>
           </h1>
         </div>
 
@@ -233,7 +242,7 @@ div.csl-indent {
 <p><strong>verificacion de ceros en la serie</strong></p>
 <pre><code>## [1] 0</code></pre>
 <pre><code>## [1] 0</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>Se observa una estacionalidad bien definida en la serie, lo que indica patrones recurrentes a lo largo del tiempo. En cuanto a la tendencia, se aprecia una disminución progresiva del consumo semanal hasta aproximadamente mediados del año 2016, momento en el que la serie parece estabilizarse. Esta variación en la tendencia sugiere que la media no se mantiene constante, lo cual indica que la serie no es estacionaria en media. Además, los residuos presentan picos pronunciados, lo que evidencia la presencia de valores atípicos y posibles cambios en la varianza a lo largo del tiempo.</p>
 </div>
 <div id="estacionariedad" class="section level2 hasAnchor" number="3.2">
@@ -251,7 +260,7 @@ div.csl-indent {
 <h2><span class="header-section-number">3.3</span> Resultados de la Descomposicion y Estacionariedad<a href="prepocesamiento-de-datos.html#resultados-de-la-descomposicion-y-estacionariedad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A partir de lo observado, se concluye que es necesaria una transformación para estabilizar tanto la media como la varianza de la serie temporal <span class="citation">(<a href="#ref-hyndman2021forecasting">Hyndman and Athanasopoulos 2021</a>)</span>. Por ello, se aplicará una transformación logarítmica con el fin de reducir la variabilidad, seguida de una diferenciación para eliminar la tendencia y lograr una media más constante en el tiempo.</p>
 <p><strong>Primera Diferenciación</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-1.png" width="672" /><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
 <pre><code>## 
 ##  Augmented Dickey-Fuller Test
 ## 

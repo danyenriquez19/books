@@ -1,14 +1,5 @@
----
-title: "ARIMA"
-author: "Dany Enriquez"
-date: "`r Sys.Date()`"
-output: html_document
----
-
-
-# Metodología Box-Jenkins y Modelos ARIMA
-
 ## **Modelo ARIMA**
+
 Los modelos autorregresivos integrados de media móvil (ARIMA, por sus siglas en inglés: AutoRegressive Integrated Moving Average) combinan tres componentes:
 
 * AR (Autorregresivo): la serie se explica por sus propios valores pasados.
@@ -27,7 +18,7 @@ Un modelo ARIMA se denota como ARIMA(p, d, q), donde:
 
 Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.
 
-##**Metodología Box-Jenkins**
+## **Metodología Box-Jenkins**
 
 La metodología Box-Jenkins es un enfoque sistemático que permite identificar, estimar y validar modelos ARMA o ARIMA que se ajusten adecuadamente a una serie de tiempo. Esta metodología consta de cuatro etapas principales:
 
@@ -90,4 +81,3 @@ Una vez validado el modelo, se procede a generar pronósticos a corto, mediano o
 * Comparar los pronósticos con datos reales (si están disponibles).
 
 * Evaluar la precisión del modelo predictivo.
-

@@ -32,11 +32,18 @@
 
 ---
 
+
 # Importancia del Análisis del Consumo de Agua
 
-Placeholder
+El uso responsable del agua representa uno de los principales desafíos de la sociedad contemporánea, debido a factores como el cambio climático, la contaminación y la sobreexplotación de los recursos hídricos. Estas problemáticas comprometen seriamente la sostenibilidad de la vida urbana y el equilibrio de los ecosistemas.
 
+Frente a este escenario, diversas ciudades han comenzado a implementar soluciones tecnológicas, como los medidores inteligentes, que permiten monitorear y controlar el consumo de agua por parte de la población. Estos dispositivos generan datos detallados a lo largo del tiempo, lo que facilita la detección de patrones de uso, así como la identificación de comportamientos anómalos o indicios de fraude. Esta información resulta fundamental para diseñar estrategias que promuevan un uso más eficiente y responsable del recurso hídrico.
 
+Existen numerosos estudios que abordan esta problemática desde diferentes enfoques. En el presente trabajo se tomará como referencia un conjunto de datos recopilado en el marco del proyecto europeo DAIAD, financiado por el Séptimo Programa Marco de la Unión Europea [@daiad_project]. Este conjunto contiene series temporales de consumo de agua registradas por medidores inteligentes (Smart Water Meters, SWM) instalados en 1007 hogares de la ciudad de Alicante, gestionados por la empresa AMAEM.
+
+El objetivo de este estudio es generar pronósticos de consumo a partir de dicha información, con el fin de comprender los patrones de comportamiento en el uso del agua y, en consecuencia, poner estos resultados a disposición de las entidades o actores interesados, para apoyar la toma de decisiones y fomentar un uso más eficiente y sostenible del recurso.
+
+Los datos utilizados en este análisis provienen del conjunto titulado Smart Water Meter Consumption Time Series[@smart_water_meters], el cual está disponible públicamente en el portal de la Hellenic Data Service y se encuentra licenciado bajo los términos de CC BY-SA 4.0. Este recurso proporciona una base sólida para el desarrollo de modelos de pronóstico y análisis de patrones de consumo de agua.
 
 <!--chapter:end:index.Rmd-->
 
@@ -49,7 +56,8 @@ Ya que en la base de datos existen múltiples series de tiempo asociadas a cada 
 El usuario selccionado al azar tiene user.key 4f7729cf-f0fc-4333-bea7-4ee4aeaaa246
 
 ```{r, echo=FALSE}
-data<-read.csv2("usuario_aleatorio.csv")
+
+df<-read.csv2("usuario_aleatorio.csv")
 ```
 
 
@@ -76,13 +84,13 @@ kable(
 primeros 5 registros.
 
 ```{r, echo=FALSE}
-head(data, 5)
+head(df, 5)
 ```
 
 últimos 5 registros
 
 ```{r, echo=FALSE}
-tail(data, 5)
+tail(df, 5)
 ```
 
 El análisis de los datos revela que los registros fueron tomados en intervalos de una hora. El período de recopilación abarca desde el año 2015 hasta 2017 y ya se han calculado la diferencia en los consumos.
@@ -91,7 +99,7 @@ El análisis de los datos revela que los registros fueron tomados en intervalos 
 
 ```{r, echo=FALSE}
 
-nulos<-sum(is.na(data))
+nulos<-sum(is.na(df))
 cat("la base de datos cuenta con ",nulos,"valores faltantes" )
 
 ```
@@ -99,14 +107,19 @@ cat("la base de datos cuenta con ",nulos,"valores faltantes" )
 ## Formato de las variables
 
 ```{r, echo=FALSE}
-sapply(data, class)
+sapply(df, class)
 ```
 
 podemos observar que la variable "datetime" no esta en formato de fecha.
 
 ```{r, echo=FALSE}
+
+df$datetime <- as.POSIXct(df$datetime, format = "%d/%m/%Y %H:%M:%S")
+
+
 # Convertir a formato de fecha y hora
-data$datetime <- as.POSIXct(data$datetime, format = "%d/%m/%Y %H:%M:%S")
+df$datetime <- as.POSIXct(df$datetime, format = "%d/%m/%Y %H:%M:%S")
+
 
 ```
 
@@ -138,11 +151,44 @@ kable(
 )
 ```
 
-El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal.
+<<<<<<< HEAD
+El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal, ademas de valores con consumos negativos
+=======
+El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal, ademas de valores negativos los cuales se imputaran.
+
+## Valores Negativos
+
+```{r, echo=FALSE}
+# Contar valores negativos en diff
+num_negativos <- sum(df$diff < 0, na.rm = TRUE)
+
+# Mostrar cuántos negativos hay
+cat("Número de valores negativos en diff:", num_negativos, "\n")
+
+```
+
+## Imputar Valores Negativos
+
+```{r, echo=FALSE}
+# Imputar (reemplazar) valores negativos por cero
+df <- df %>%
+  mutate(diff = ifelse(diff < 0, 0, diff))
+
+# Confirmar que ya no hay valores negativos
+num_negativos_despues <- sum(df$diff < 0, na.rm = TRUE)
+cat("Número de valores negativos después de imputar:", num_negativos_despues, "\n")
+```
+>>>>>>> b759291 (Renderizado actualizado del libro)
+
+
 
 Se adicionara el consumo por año
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(lubridate)
 library(kableExtra)
 library(dplyr)
 tabla_resumen <- df %>%
@@ -160,6 +206,33 @@ tabla_resumen %>%
 
 ```
 
+## valores Negativos 
+
+```{r}
+valores_negativos <- df %>% filter(diff < 0)
+valores_negativos
+```
+
+## Imputacion Valores negativos
+
+```{r,echo=FALSE}
+library(magrittr)
+library(dplyr)
+
+# Ejemplo simple de df con diff
+df <- data.frame(diff = c(-3, 0, 5, -1, 7))
+
+# Reemplazar valores negativos en diff por 0
+df <- df %>%
+  mutate(diff = ifelse(diff < 0, 0, diff))
+
+# Contar valores negativos después (debería ser 0)
+num_negativos_despues <- sum(df$diff < 0, na.rm = TRUE)
+cat("Número de valores negativos después de imputar:", num_negativos_despues, "\n")
+
+```
+
+
 ## Resumen Analisis Estadistico
 
 Se observa que el consumo de agua presenta una notable variabilidad y numerosos valores atípicos. El rango de consumo oscila entre 0 y 2152 metros cúbicos por hora. Sin embargo, el valor promedio general se encuentra alrededor de los 33 metros cúbicos, lo cual sugiere que, aunque existen registros extremos de consumo, la mayoría de los valores se concentran en niveles mucho más bajos. Esta disparidad podría indicar posibles irregularidades en los datos o un comportamiento inconsistente en el consumo de agua.
@@ -175,15 +248,25 @@ En este apartado analizaremos los diferentes comportamientos de la variable "dif
 library(ggplot2)
 library(dplyr)
 library(lubridate)
-ggplot(df,aes(x="", y= df$diff))+geom_boxplot(fill="darkblue", color = "lightblue")+ labs(x="", y= "consumo(diff)")+ theme_minimal()
+
+ggplot(df,aes(x="", y= diff))+geom_boxplot(fill="darkblue", color = "lightblue")+ labs(x="", y= "consumo(diff)")+ theme_minimal()
+
 
 ```
 
 **Consumo Anual**
 
-```{r,echo=FALSE}
-df<- df %>% mutate(anio= year(datetime))
-ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
+```{r boxplot-diff-anio, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+# Asegúrate de que df esté definido previamente
+df <- df %>%
+  mutate(anio = lubridate::year(datetime))  # usa lubridate::year si datetime es POSIXct
+
+ggplot(df, aes(x = as.factor(anio), y = diff)) +
+  geom_boxplot(fill = "lightgreen", color = "darkgreen") +
+  labs(x = "Año", y = "Consumo (diff)") +
+  theme_minimal()
 ```
 
 se observa una gran presencia de registros atipicos por cada uno de los años registrados.
@@ -570,9 +653,12 @@ No se observa algun patron claro que indique que la varianza no sea constante, s
 
 En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.
 
-# Metodología Box-Jenkins y Modelos ARIMA
+
+
+<!--chapter:end:EDA.Rmd-->
 
 ## **Modelo ARIMA**
+
 Los modelos autorregresivos integrados de media móvil (ARIMA, por sus siglas en inglés: AutoRegressive Integrated Moving Average) combinan tres componentes:
 
 * AR (Autorregresivo): la serie se explica por sus propios valores pasados.
@@ -591,7 +677,7 @@ Un modelo ARIMA se denota como ARIMA(p, d, q), donde:
 
 Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.
 
-##**Metodología Box-Jenkins**
+## **Metodología Box-Jenkins**
 
 La metodología Box-Jenkins es un enfoque sistemático que permite identificar, estimar y validar modelos ARMA o ARIMA que se ajusten adecuadamente a una serie de tiempo. Esta metodología consta de cuatro etapas principales:
 
@@ -655,7 +741,7 @@ Una vez validado el modelo, se procede a generar pronósticos a corto, mediano o
 
 * Evaluar la precisión del modelo predictivo.
 
-<!--chapter:end:EDA.Rmd-->
+<!--chapter:end:ARIMA.Rmd-->
 
 `r if (knitr:::is_html_output()) '
 # Referencias {-}
