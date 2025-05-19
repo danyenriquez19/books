@@ -1,7 +1,7 @@
 tab:diccionario-tabla
 tab:unnamed-chunk-7
-tab:unnamed-chunk-8
-tab:unnamed-chunk-11
+tab:unnamed-chunk-10
+tab:unnamed-chunk-12
 importancia-del-análisis-del-consumo-de-agua
 analisis-exploratorio-de-datos
 selección-de-usuario
@@ -9,6 +9,8 @@ rango-de-las-mediciones
 valores-faltantes
 formato-de-las-variables
 estadisticas-descriptivas
+valores-negativos
+imputar-valores-negativos
 resumen-analisis-estadistico
 analisis-grafico
 serie-de-tiempo
@@ -24,3 +26,5 @@ resultados-de-la-descomposicion-y-estacionariedad
 pronosticos
 metodólogia-holter-winter
 analisis-de-los-residuos
+metodología-box-jenkins-y-modelos-arima
+modelo-arima

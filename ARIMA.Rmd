@@ -1,0 +1,93 @@
+---
+title: "ARIMA"
+author: "Dany Enriquez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+# Metodología Box-Jenkins y Modelos ARIMA
+
+## Modelo ARIMA
+Los modelos autorregresivos integrados de media móvil (ARIMA, por sus siglas en inglés: AutoRegressive Integrated Moving Average) combinan tres componentes:
+
+* AR (Autorregresivo): la serie se explica por sus propios valores pasados.
+
+* I (Integrado): se aplican diferenciaciones a la serie para hacerla estacionaria.
+
+* MA (Media móvil): se modela el error como una combinación lineal de errores pasados.
+
+Un modelo ARIMA se denota como ARIMA(p, d, q), donde:
+
+* p: número de términos autorregresivos (AR).
+
+* d: número de diferenciaciones necesarias para hacer la serie estacionaria.
+
+* q: número de términos de medias móviles (MA).
+
+Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.
+
+##Metodología Box-Jenkins
+
+La metodología Box-Jenkins es un enfoque sistemático que permite identificar, estimar y validar modelos ARMA o ARIMA que se ajusten adecuadamente a una serie de tiempo. Esta metodología consta de cuatro etapas principales:
+
+1. **Identificación del modelo**
+En esta etapa se analiza si la serie es estacionaria. Si no lo es, se aplican transformaciones (como la diferenciación) para lograr la estacionariedad. A continuación, se identifican los posibles valores de los parámetros del modelo ARIMA(p, d, q), con base en el análisis gráfico y estadístico.
+
+**Actividades comunes:**
+
+* Análisis gráfico: para detectar tendencia, estacionalidad o cambios en la media.
+
+* Prueba de estacionariedad: como la prueba de Dickey-Fuller, que evalúa si la serie tiene raíz unitaria.
+
+* Diferenciación: si la serie no es estacionaria, se aplica una o más veces para lograr la estacionariedad y determinar el parámetro d.
+
+* Revisión de ACF y PACF:
+
+ACF (autocorrelación): ayuda a identificar el orden q (media móvil).
+
+PACF (autocorrelación parcial): permite sugerir el orden p (autorregresivo).
+
+2. **Estimación de parámetros**
+Una vez identificado el modelo, se ajusta a los datos para estimar sus parámetros.
+
+**Actividades:**
+
+* Estimar los coeficientes mediante métodos como máxima verosimilitud.
+
+* Evaluar la significancia estadística de los parámetros.
+
+* Comparar modelos alternativos utilizando criterios como:
+
+AIC (Criterio de Información de Akaike)
+
+BIC (Criterio de Información Bayesiano)
+
+RMSE (Raíz del error cuadrático medio)
+
+3. **Verificación del modelo**
+Se valida que los residuos del modelo se comporten como ruido blanco, es decir, que no presenten autocorrelación y tengan media cero y varianza constante.
+
+**Actividades:**
+
+* Analizar los residuos en el tiempo.
+
+* Revisar los gráficos de ACF y PACF de los residuos.
+
+* Verificar la normalidad mediante histogramas o pruebas como Shapiro-Wilk.
+
+* Verificar independencia mediante pruebas como Ljung-Box.
+
+Si los supuestos no se cumplen, se debe reconsiderar el modelo y repetir las etapas anteriores.
+
+4. **Pronóstico**
+Una vez validado el modelo, se procede a generar pronósticos a corto, mediano o largo plazo.
+
+**Actividades:**
+
+* Generar predicciones con intervalos de confianza.
+
+* Comparar los pronósticos con datos reales (si están disponibles).
+
+* Evaluar la precisión del modelo predictivo.
+

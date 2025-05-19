@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 4 Pronosticos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
-  <meta name="description" content="Capítulo 4 Pronosticos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <title>Capítulo 4 Pronosticos | ARIMA</title>
+  <meta name="description" content="Capítulo 4 Pronosticos | ARIMA" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 4 Pronosticos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta property="og:title" content="Capítulo 4 Pronosticos | ARIMA" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 4 Pronosticos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta name="twitter:title" content="Capítulo 4 Pronosticos | ARIMA" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Dany Enriquez" />
 
 
-<meta name="date" content="2025-05-12" />
+<meta name="date" content="2025-05-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="prepocesamiento-de-datos.html"/>
-<link rel="next" href="referencias.html"/>
+<link rel="next" href="metodología-box-jenkins-y-modelos-arima.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -183,14 +183,16 @@ div.csl-indent {
 <li class="chapter" data-level="2.3" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-faltantes"><i class="fa fa-check"></i><b>2.3</b> Valores Faltantes</a></li>
 <li class="chapter" data-level="2.4" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#formato-de-las-variables"><i class="fa fa-check"></i><b>2.4</b> Formato de las variables</a></li>
 <li class="chapter" data-level="2.5" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estadisticas-descriptivas"><i class="fa fa-check"></i><b>2.5</b> Estadisticas Descriptivas</a></li>
-<li class="chapter" data-level="2.6" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resumen-analisis-estadistico"><i class="fa fa-check"></i><b>2.6</b> Resumen Analisis Estadistico</a></li>
-<li class="chapter" data-level="2.7" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#analisis-grafico"><i class="fa fa-check"></i><b>2.7</b> Analisis Grafico</a></li>
-<li class="chapter" data-level="2.8" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#serie-de-tiempo"><i class="fa fa-check"></i><b>2.8</b> Serie de Tiempo</a></li>
-<li class="chapter" data-level="2.9" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resultados-analisis-grafico"><i class="fa fa-check"></i><b>2.9</b> Resultados Analisis Grafico</a></li>
-<li class="chapter" data-level="2.10" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#medias-moviles"><i class="fa fa-check"></i><b>2.10</b> Medias Moviles</a></li>
-<li class="chapter" data-level="2.11" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rezagos"><i class="fa fa-check"></i><b>2.11</b> Rezagos</a></li>
-<li class="chapter" data-level="2.12" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estacionalidad"><i class="fa fa-check"></i><b>2.12</b> Estacionalidad</a></li>
-<li class="chapter" data-level="2.13" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#autocorrelaciones"><i class="fa fa-check"></i><b>2.13</b> Autocorrelaciones</a></li>
+<li class="chapter" data-level="2.6" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-negativos"><i class="fa fa-check"></i><b>2.6</b> Valores Negativos</a></li>
+<li class="chapter" data-level="2.7" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#imputar-valores-negativos"><i class="fa fa-check"></i><b>2.7</b> Imputar Valores Negativos</a></li>
+<li class="chapter" data-level="2.8" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resumen-analisis-estadistico"><i class="fa fa-check"></i><b>2.8</b> Resumen Analisis Estadistico</a></li>
+<li class="chapter" data-level="2.9" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#analisis-grafico"><i class="fa fa-check"></i><b>2.9</b> Analisis Grafico</a></li>
+<li class="chapter" data-level="2.10" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#serie-de-tiempo"><i class="fa fa-check"></i><b>2.10</b> Serie de Tiempo</a></li>
+<li class="chapter" data-level="2.11" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resultados-analisis-grafico"><i class="fa fa-check"></i><b>2.11</b> Resultados Analisis Grafico</a></li>
+<li class="chapter" data-level="2.12" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#medias-moviles"><i class="fa fa-check"></i><b>2.12</b> Medias Moviles</a></li>
+<li class="chapter" data-level="2.13" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rezagos"><i class="fa fa-check"></i><b>2.13</b> Rezagos</a></li>
+<li class="chapter" data-level="2.14" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estacionalidad"><i class="fa fa-check"></i><b>2.14</b> Estacionalidad</a></li>
+<li class="chapter" data-level="2.15" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#autocorrelaciones"><i class="fa fa-check"></i><b>2.15</b> Autocorrelaciones</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html"><i class="fa fa-check"></i><b>3</b> Prepocesamiento de Datos</a>
 <ul>
@@ -202,6 +204,10 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="4.1" data-path="pronosticos.html"><a href="pronosticos.html#metodólogia-holter-winter"><i class="fa fa-check"></i><b>4.1</b> Metodólogia Holter Winter</a></li>
 <li class="chapter" data-level="4.2" data-path="pronosticos.html"><a href="pronosticos.html#analisis-de-los-residuos"><i class="fa fa-check"></i><b>4.2</b> Analisis de los Residuos</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelo-arima"><i class="fa fa-check"></i><b>5.1</b> Modelo ARIMA</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
@@ -216,7 +222,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ARIMA</a>
           </h1>
         </div>
 
@@ -232,14 +238,14 @@ div.csl-indent {
 <p>Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.</p>
 <p>Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
 <pre><code>## RMSE: 0.7559494</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Se observa que los valores pronosticados se ajustan adecuadamente al comportamiento general de la serie; sin embargo, tienden a sobreestimar los valores reales.</p>
 </div>
 <div id="analisis-de-los-residuos" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analisis de los Residuos<a href="pronosticos.html#analisis-de-los-residuos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Examinaremos los residuos del modelo para evaluar si este ha logrado capturar adecuadamente la estructura subyacente de la serie temporal.</p>
 <p><strong>QQ-plot</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>Se observa</p>
 <p><strong>Prueba de Shapiro-Wilks</strong></p>
 <pre><code>## 
@@ -249,10 +255,10 @@ div.csl-indent {
 ## W = 0.79869, p-value = 7.341e-08</code></pre>
 <p>Los residuos no siguen una distribución Normal.</p>
 <p><strong>Autocorrelacion</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>El gráfico ACF de los residuos muestra que no hay autocorrelaciones significativas en los rezagos. Esto sugiere que los residuos son independientes en el tiempo, y por tanto, que el modelo ha logrado capturar adecuadamente la estructura temporal de la serie.</p>
 <p><strong>Homocedasticidad</strong> varianza constante</p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.</p>
 <p>En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.</p>
 
@@ -270,7 +276,7 @@ Hurtado Garzón, Lizette Juliana. 2013. <span>“Aplicación de Metodologías AR
         </div>
       </div>
 <a href="prepocesamiento-de-datos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="metodología-box-jenkins-y-modelos-arima.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

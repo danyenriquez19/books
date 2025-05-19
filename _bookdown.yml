@@ -24,6 +24,8 @@ delete_merged_file: true
 rmd_files:
   - "index.Rmd"
   - "EDA.Rmd"
+  - "ARIMA.Rmd"
   - "06-references.Rmd"
+
 output_dir: "docs"
 

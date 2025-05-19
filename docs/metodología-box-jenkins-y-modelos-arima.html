@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Referencias | ARIMA</title>
-  <meta name="description" content="Referencias | ARIMA" />
+  <title>Capítulo 5 Metodología Box-Jenkins y Modelos ARIMA | ARIMA</title>
+  <meta name="description" content="Capítulo 5 Metodología Box-Jenkins y Modelos ARIMA | ARIMA" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Referencias | ARIMA" />
+  <meta property="og:title" content="Capítulo 5 Metodología Box-Jenkins y Modelos ARIMA | ARIMA" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Referencias | ARIMA" />
+  <meta name="twitter:title" content="Capítulo 5 Metodología Box-Jenkins y Modelos ARIMA | ARIMA" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="metodología-box-jenkins-y-modelos-arima.html"/>
-
+<link rel="prev" href="pronosticos.html"/>
+<link rel="next" href="referencias.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -230,22 +230,74 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="referencias" class="section level1 unnumbered hasAnchor">
-<h1>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="metodología-box-jenkins-y-modelos-arima" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Capítulo 5</span> Metodología Box-Jenkins y Modelos ARIMA<a href="metodología-box-jenkins-y-modelos-arima.html#metodología-box-jenkins-y-modelos-arima" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="modelo-arima" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Modelo ARIMA<a href="metodología-box-jenkins-y-modelos-arima.html#modelo-arima" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Los modelos autorregresivos integrados de media móvil (ARIMA, por sus siglas en inglés: AutoRegressive Integrated Moving Average) combinan tres componentes:</p>
+<ul>
+<li><p>AR (Autorregresivo): la serie se explica por sus propios valores pasados.</p></li>
+<li><p>I (Integrado): se aplican diferenciaciones a la serie para hacerla estacionaria.</p></li>
+<li><p>MA (Media móvil): se modela el error como una combinación lineal de errores pasados.</p></li>
+</ul>
+<p>Un modelo ARIMA se denota como ARIMA(p, d, q), donde:</p>
+<ul>
+<li><p>p: número de términos autorregresivos (AR).</p></li>
+<li><p>d: número de diferenciaciones necesarias para hacer la serie estacionaria.</p></li>
+<li><p>q: número de términos de medias móviles (MA).</p></li>
+</ul>
+<p>Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.</p>
+<p>##Metodología Box-Jenkins</p>
+<p>La metodología Box-Jenkins es un enfoque sistemático que permite identificar, estimar y validar modelos ARMA o ARIMA que se ajusten adecuadamente a una serie de tiempo. Esta metodología consta de cuatro etapas principales:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Identificación del modelo</strong>
+En esta etapa se analiza si la serie es estacionaria. Si no lo es, se aplican transformaciones (como la diferenciación) para lograr la estacionariedad. A continuación, se identifican los posibles valores de los parámetros del modelo ARIMA(p, d, q), con base en el análisis gráfico y estadístico.</li>
+</ol>
+<p><strong>Actividades comunes:</strong></p>
+<ul>
+<li><p>Análisis gráfico: para detectar tendencia, estacionalidad o cambios en la media.</p></li>
+<li><p>Prueba de estacionariedad: como la prueba de Dickey-Fuller, que evalúa si la serie tiene raíz unitaria.</p></li>
+<li><p>Diferenciación: si la serie no es estacionaria, se aplica una o más veces para lograr la estacionariedad y determinar el parámetro d.</p></li>
+<li><p>Revisión de ACF y PACF:</p></li>
+</ul>
+<p>ACF (autocorrelación): ayuda a identificar el orden q (media móvil).</p>
+<p>PACF (autocorrelación parcial): permite sugerir el orden p (autorregresivo).</p>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Estimación de parámetros</strong>
+Una vez identificado el modelo, se ajusta a los datos para estimar sus parámetros.</li>
+</ol>
+<p><strong>Actividades:</strong></p>
+<ul>
+<li><p>Estimar los coeficientes mediante métodos como máxima verosimilitud.</p></li>
+<li><p>Evaluar la significancia estadística de los parámetros.</p></li>
+<li><p>Comparar modelos alternativos utilizando criterios como:</p></li>
+</ul>
+<p>AIC (Criterio de Información de Akaike)</p>
+<p>BIC (Criterio de Información Bayesiano)</p>
+<p>RMSE (Raíz del error cuadrático medio)</p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Verificación del modelo</strong>
+Se valida que los residuos del modelo se comporten como ruido blanco, es decir, que no presenten autocorrelación y tengan media cero y varianza constante.</li>
+</ol>
+<p><strong>Actividades:</strong></p>
+<ul>
+<li><p>Analizar los residuos en el tiempo.</p></li>
+<li><p>Revisar los gráficos de ACF y PACF de los residuos.</p></li>
+<li><p>Verificar la normalidad mediante histogramas o pruebas como Shapiro-Wilk.</p></li>
+<li><p>Verificar independencia mediante pruebas como Ljung-Box.</p></li>
+</ul>
+<p>Si los supuestos no se cumplen, se debe reconsiderar el modelo y repetir las etapas anteriores.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Pronóstico</strong>
+Una vez validado el modelo, se procede a generar pronósticos a corto, mediano o largo plazo.</li>
+</ol>
+<p><strong>Actividades:</strong></p>
+<ul>
+<li><p>Generar predicciones con intervalos de confianza.</p></li>
+<li><p>Comparar los pronósticos con datos reales (si están disponibles).</p></li>
+<li><p>Evaluar la precisión del modelo predictivo.</p></li>
+</ul>
 
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div class="csl-entry">
-Hellenic Data Service. 2023. <span>“Smart Water Meter Consumption Time Series.”</span> <a href="https://data.hellenicdataservice.gr/dataset/78776f38-a58b-4a2a-a8f9-85b964fe5c95">https://data.hellenicdataservice.gr/dataset/78776f38-a58b-4a2a-a8f9-85b964fe5c95</a>.
-</div>
-<div class="csl-entry">
-Hurtado Garzón, Lizette Juliana. 2013. <span>“Aplicación de Metodologías ARIMA y Holt-Winters En La Valoración Del Pasivo Contingente de Proyectos de Infraestructura Vial Desarrollados Bajo Esquemas de Participación Público-Privada.”</span> Proyecto de grado. Universidad de los Andes. <a href="https://repositorio.uniandes.edu.co/bitstreams/6ab918dc-dc2d-4ee4-85d7-ee139f7d195c/download">https://repositorio.uniandes.edu.co/bitstreams/6ab918dc-dc2d-4ee4-85d7-ee139f7d195c/download</a>.
-</div>
-<div class="csl-entry">
-Hyndman, Rob J., and George Athanasopoulos. 2021. <em>Forecasting: Principles and Practice</em>. 3rd ed. OTexts. <a href="https://otexts.com/fpp3/transformations.html">https://otexts.com/fpp3/transformations.html</a>.
-</div>
-<div class="csl-entry">
-Spyropoulos, Theodoros, John Soldatos, et al. 2014. <span>“DAIAD: Delivering Advanced Knowledge Through Smart Water Meters.”</span> European Commission; <a href="https://cordis.europa.eu/project/id/619186" class="uri">https://cordis.europa.eu/project/id/619186</a>. <a href="https://cordis.europa.eu/project/id/619186">https://cordis.europa.eu/project/id/619186</a>.
-</div>
 </div>
 </div>
             </section>
@@ -253,8 +305,8 @@ Spyropoulos, Theodoros, John Soldatos, et al. 2014. <span>“DAIAD: Delivering A
           </div>
         </div>
       </div>
-<a href="metodología-box-jenkins-y-modelos-arima.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="pronosticos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -285,7 +337,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/rstudio/bookdown-demo/edit/master/06-references.Rmd",
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/ARIMA.Rmd",
     "text": "Edit"
   },
   "history": {

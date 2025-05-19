@@ -7,7 +7,7 @@ Ya que en la base de datos existen múltiples series de tiempo asociadas a cada 
 El usuario selccionado al azar tiene user.key 4f7729cf-f0fc-4333-bea7-4ee4aeaaa246
 
 ```{r, echo=FALSE}
-data<-read.csv2("usuario_aleatorio.csv")
+df<-read.csv2("usuario_aleatorio.csv")
 ```
 
 
@@ -34,13 +34,13 @@ kable(
 primeros 5 registros.
 
 ```{r, echo=FALSE}
-head(data, 5)
+head(df, 5)
 ```
 
 últimos 5 registros
 
 ```{r, echo=FALSE}
-tail(data, 5)
+tail(df, 5)
 ```
 
 El análisis de los datos revela que los registros fueron tomados en intervalos de una hora. El período de recopilación abarca desde el año 2015 hasta 2017 y ya se han calculado la diferencia en los consumos.
@@ -49,7 +49,7 @@ El análisis de los datos revela que los registros fueron tomados en intervalos 
 
 ```{r, echo=FALSE}
 
-nulos<-sum(is.na(data))
+nulos<-sum(is.na(df))
 cat("la base de datos cuenta con ",nulos,"valores faltantes" )
 
 ```
@@ -57,14 +57,14 @@ cat("la base de datos cuenta con ",nulos,"valores faltantes" )
 ## Formato de las variables
 
 ```{r, echo=FALSE}
-sapply(data, class)
+sapply(df, class)
 ```
 
 podemos observar que la variable "datetime" no esta en formato de fecha.
 
 ```{r, echo=FALSE}
 # Convertir a formato de fecha y hora
-data$datetime <- as.POSIXct(data$datetime, format = "%d/%m/%Y %H:%M:%S")
+df$datetime <- as.POSIXct(df$datetime, format = "%d/%m/%Y %H:%M:%S")
 
 ```
 
@@ -96,7 +96,32 @@ kable(
 )
 ```
 
-El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal.
+El análisis revela valores de consumo anormalmente elevados en determinadas horas, lo que evidencia la presencia de valores atípicos y una considerable variabilidad en la serie temporal, ademas de valores negativos los cuales se imputaran.
+
+## Valores Negativos
+
+```{r, echo=FALSE}
+# Contar valores negativos en diff
+num_negativos <- sum(df$diff < 0, na.rm = TRUE)
+
+# Mostrar cuántos negativos hay
+cat("Número de valores negativos en diff:", num_negativos, "\n")
+
+```
+
+## Imputar Valores Negativos
+
+```{r, echo=FALSE}
+# Imputar (reemplazar) valores negativos por cero
+df <- df %>%
+  mutate(diff = ifelse(diff < 0, 0, diff))
+
+# Confirmar que ya no hay valores negativos
+num_negativos_despues <- sum(df$diff < 0, na.rm = TRUE)
+cat("Número de valores negativos después de imputar:", num_negativos_despues, "\n")
+```
+
+
 
 Se adicionara el consumo por año
 
@@ -133,15 +158,23 @@ En este apartado analizaremos los diferentes comportamientos de la variable "dif
 library(ggplot2)
 library(dplyr)
 library(lubridate)
-ggplot(df,aes(x="", y= df$diff))+geom_boxplot(fill="darkblue", color = "lightblue")+ labs(x="", y= "consumo(diff)")+ theme_minimal()
+ggplot(df,aes(x="", y=diff))+geom_boxplot(fill="darkblue", color = "lightblue")+ labs(x="", y= "consumo(diff)")+ theme_minimal()
 
 ```
 
 **Consumo Anual**
 
-```{r,echo=FALSE}
-df<- df %>% mutate(anio= year(datetime))
-ggplot(df, aes(x= as.factor(anio),y= diff))+ geom_boxplot(fill= "lightgreen", color= "darkgreen")+ labs(x="año", y = " Consumo (diff) ")+ theme_minimal() 
+```{r boxplot-diff-anio, echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+
+# Asegúrate de que df esté definido previamente
+df <- df %>%
+  mutate(anio = lubridate::year(datetime))  # usa lubridate::year si datetime es POSIXct
+
+ggplot(df, aes(x = as.factor(anio), y = diff)) +
+  geom_boxplot(fill = "lightgreen", color = "darkgreen") +
+  labs(x = "Año", y = "Consumo (diff)") +
+  theme_minimal()
 ```
 
 se observa una gran presencia de registros atipicos por cada uno de los años registrados.
@@ -527,4 +560,5 @@ abline(h = 0, col = "red")
 No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.
 
 En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.
+
 
