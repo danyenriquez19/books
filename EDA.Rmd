@@ -117,13 +117,13 @@ cat("Número de valores negativos en diff:", num_negativos, "\n")
 ## Imputar Valores Negativos
 
 ```{r, echo=FALSE}
-# Imputar (reemplazar) valores negativos por cero
-df <- df %>%
-  mutate(diff = ifelse(diff < 0, 0, diff))
+# Imputar (reemplazar) valores negativos por cero sin mutate
+df$diff[df$diff < 0] <- 0
 
 # Confirmar que ya no hay valores negativos
 num_negativos_despues <- sum(df$diff < 0, na.rm = TRUE)
 cat("Número de valores negativos después de imputar:", num_negativos_despues, "\n")
+
 ```
 
 
@@ -153,31 +153,6 @@ tabla_resumen %>%
 
 ```
 
-## valores Negativos 
-
-```{r}
-valores_negativos <- df %>% filter(diff < 0)
-valores_negativos
-```
-
-## Imputacion Valores negativos
-
-```{r,echo=FALSE}
-library(magrittr)
-library(dplyr)
-
-# Ejemplo simple de df con diff
-df <- data.frame(diff = c(-3, 0, 5, -1, 7))
-
-# Reemplazar valores negativos en diff por 0
-df <- df %>%
-  mutate(diff = ifelse(diff < 0, 0, diff))
-
-# Contar valores negativos después (debería ser 0)
-num_negativos_despues <- sum(df$diff < 0, na.rm = TRUE)
-cat("Número de valores negativos después de imputar:", num_negativos_despues, "\n")
-
-```
 
 
 ## Resumen Analisis Estadistico

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 3 Prepocesamiento de Datos | ARIMA</title>
-  <meta name="description" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
+  <title>Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
+  <meta name="description" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
+  <meta property="og:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 3 Prepocesamiento de Datos | ARIMA" />
+  <meta name="twitter:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   
   
   
@@ -23,7 +23,7 @@
 <meta name="author" content="Dany Enriquez" />
 
 
-<meta name="date" content="2025-05-19" />
+<meta name="date" content="2025-05-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -205,20 +205,15 @@ div.csl-indent {
 <li class="chapter" data-level="4.1" data-path="pronosticos.html"><a href="pronosticos.html#metodólogia-holter-winter"><i class="fa fa-check"></i><b>4.1</b> Metodólogia Holter Winter</a></li>
 <li class="chapter" data-level="4.2" data-path="pronosticos.html"><a href="pronosticos.html#analisis-de-los-residuos"><i class="fa fa-check"></i><b>4.2</b> Analisis de los Residuos</a></li>
 </ul></li>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a></li>
-=======
->>>>>>> aa758e2
 <li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelo-arima"><i class="fa fa-check"></i><b>5.1</b> Modelo ARIMA</a></li>
+<li class="chapter" data-level="5.2" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#metodología-box-jenkins"><i class="fa fa-check"></i><b>5.2</b> Metodología Box-Jenkins</a></li>
+<li class="chapter" data-level="5.3" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelado"><i class="fa fa-check"></i><b>5.3</b> Modelado</a></li>
+<li class="chapter" data-level="5.4" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#validacion-de-supuestos-sobre-los-residuos"><i class="fa fa-check"></i><b>5.4</b> Validacion de Supuestos sobre los Residuos</a></li>
+<li class="chapter" data-level="5.5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#pronosticos-1"><i class="fa fa-check"></i><b>5.5</b> Pronosticos</a></li>
+<li class="chapter" data-level="5.6" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#gráfico-de-pronosticos"><i class="fa fa-check"></i><b>5.6</b> Gráfico de Pronosticos</a></li>
 </ul></li>
-<<<<<<< HEAD
-=======
->>>>>>> b759291 (Renderizado actualizado del libro)
->>>>>>> aa758e2
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -232,7 +227,7 @@ div.csl-indent {
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ARIMA</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</a>
           </h1>
         </div>
 
@@ -258,7 +253,7 @@ div.csl-indent {
 ##  Augmented Dickey-Fuller Test
 ## 
 ## data:  serie_log
-## Dickey-Fuller = -2.2684, Lag order = 4, p-value = 0.465
+## Dickey-Fuller = -2.4373, Lag order = 4, p-value = 0.3948
 ## alternative hypothesis: stationary</code></pre>
 <p>En este sentido se valida el hecho de que la serie no es estacionaria, es decir, no presenta media, varianza y covarianza constante.</p>
 </div>
@@ -271,7 +266,7 @@ div.csl-indent {
 ##  Augmented Dickey-Fuller Test
 ## 
 ## data:  serie_log_diff
-## Dickey-Fuller = -4.1343, Lag order = 4, p-value = 0.01
+## Dickey-Fuller = -5.1411, Lag order = 4, p-value = 0.01
 ## alternative hypothesis: stationary</code></pre>
 <p>En este caso al diferenciar la serie una vez se verifica la estacionariedad.</p>
 </div>

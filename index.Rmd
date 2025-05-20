@@ -1,38 +1,40 @@
---- 
-    title: "PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES"
-    author: "Dany Enriquez"
-    date: "`r Sys.Date()`"
-    site: bookdown::bookdown_site
-    output: bookdown::gitbook
-    documentclass: book
-    bibliography: [book.bib, packages.bib]
-    biblio-style: apalike
-    link-citations: yes
-    github-repo: rstudio/bookdown-demo
-    language:
-      ui:
-        chapter_name: "Capítulo "
-        appendix_name: "Apéndice "
-        toc: "Tabla de contenido"
-        references: "Referencias"
-        search: "Buscar"
-      label:
-        fig: "Figura "
-        tab: "Tabla "
-        eq: "Ecuación "
-        thm: "Teorema "
-        lem: "Lema "
-        cor: "Corolario "
-        prp: "Proposición "
-        cnj: "Conjetura "
-        def: "Definición "
-        exm: "Ejemplo "
-        exr: "Ejercicio "
-        proof: "Demostración"
-
+---
+title: "PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES"
+author: "Dany Enriquez"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+language:
+  ui:
+    chapter_name: "Capítulo "
+    appendix_name: "Apéndice "
+    toc: "Tabla de contenido"
+    references: "Referencias"
+    search: "Buscar"
+  label:
+    fig: "Figura "
+    tab: "Tabla "
+    eq: "Ecuación "
+    thm: "Teorema "
+    lem: "Lema "
+    cor: "Corolario "
+    prp: "Proposición "
+    cnj: "Conjetura "
+    def: "Definición "
+    exm: "Ejemplo "
+    exr: "Ejercicio "
+    proof: "Demostración "
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE)
 
+```
 # Importancia del Análisis del Consumo de Agua
 
 El uso responsable del agua representa uno de los principales desafíos de la sociedad contemporánea, debido a factores como el cambio climático, la contaminación y la sobreexplotación de los recursos hídricos. Estas problemáticas comprometen seriamente la sostenibilidad de la vida urbana y el equilibrio de los ecosistemas.
