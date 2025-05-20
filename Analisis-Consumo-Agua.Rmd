@@ -1,3 +1,52 @@
+--- 
+    title: "PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES"
+    author: "Dany Enriquez"
+    date: "`r Sys.Date()`"
+    site: bookdown::bookdown_site
+    output: bookdown::gitbook
+    documentclass: book
+    bibliography: [book.bib, packages.bib]
+    biblio-style: apalike
+    link-citations: yes
+    github-repo: rstudio/bookdown-demo
+    language:
+      ui:
+        chapter_name: "Capítulo "
+        appendix_name: "Apéndice "
+        toc: "Tabla de contenido"
+        references: "Referencias"
+        search: "Buscar"
+      label:
+        fig: "Figura "
+        tab: "Tabla "
+        eq: "Ecuación "
+        thm: "Teorema "
+        lem: "Lema "
+        cor: "Corolario "
+        prp: "Proposición "
+        cnj: "Conjetura "
+        def: "Definición "
+        exm: "Ejemplo "
+        exr: "Ejercicio "
+        proof: "Demostración"
+
+---
+
+
+# Importancia del Análisis del Consumo de Agua
+
+El uso responsable del agua representa uno de los principales desafíos de la sociedad contemporánea, debido a factores como el cambio climático, la contaminación y la sobreexplotación de los recursos hídricos. Estas problemáticas comprometen seriamente la sostenibilidad de la vida urbana y el equilibrio de los ecosistemas.
+
+Frente a este escenario, diversas ciudades han comenzado a implementar soluciones tecnológicas, como los medidores inteligentes, que permiten monitorear y controlar el consumo de agua por parte de la población. Estos dispositivos generan datos detallados a lo largo del tiempo, lo que facilita la detección de patrones de uso, así como la identificación de comportamientos anómalos o indicios de fraude. Esta información resulta fundamental para diseñar estrategias que promuevan un uso más eficiente y responsable del recurso hídrico.
+
+Existen numerosos estudios que abordan esta problemática desde diferentes enfoques. En el presente trabajo se tomará como referencia un conjunto de datos recopilado en el marco del proyecto europeo DAIAD, financiado por el Séptimo Programa Marco de la Unión Europea [@daiad_project]. Este conjunto contiene series temporales de consumo de agua registradas por medidores inteligentes (Smart Water Meters, SWM) instalados en 1007 hogares de la ciudad de Alicante, gestionados por la empresa AMAEM.
+
+El objetivo de este estudio es generar pronósticos de consumo a partir de dicha información, con el fin de comprender los patrones de comportamiento en el uso del agua y, en consecuencia, poner estos resultados a disposición de las entidades o actores interesados, para apoyar la toma de decisiones y fomentar un uso más eficiente y sostenible del recurso.
+
+Los datos utilizados en este análisis provienen del conjunto titulado Smart Water Meter Consumption Time Series[@smart_water_meters], el cual está disponible públicamente en el portal de la Hellenic Data Service y se encuentra licenciado bajo los términos de CC BY-SA 4.0. Este recurso proporciona una base sólida para el desarrollo de modelos de pronóstico y análisis de patrones de consumo de agua.
+
+<!--chapter:end:index.Rmd-->
+
 # Analisis Exploratorio de Datos
 
 ## Selección de Usuario
@@ -600,4 +649,110 @@ No se observa algun patron claro que indique que la varianza no sea constante, s
 
 En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.
 
+
+
+<!--chapter:end:EDA.Rmd-->
+
+<<<<<<< HEAD
+---
+title: "ARIMA"
+author: "Dany Enriquez"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+# Metodología Box-Jenkins y Modelos ARIMA
+
+## Modelo ARIMA
+
+Los modelos autorregresivos integrados de media móvil (ARIMA, por sus siglas en inglés: AutoRegressive Integrated Moving Average) combinan tres componentes:
+
+* AR (Autorregresivo): la serie se explica por sus propios valores pasados.
+
+* I (Integrado): se aplican diferenciaciones a la serie para hacerla estacionaria.
+
+* MA (Media móvil): se modela el error como una combinación lineal de errores pasados.
+
+Un modelo ARIMA se denota como ARIMA(p, d, q), donde:
+
+* p: número de términos autorregresivos (AR).
+
+* d: número de diferenciaciones necesarias para hacer la serie estacionaria.
+
+* q: número de términos de medias móviles (MA).
+
+Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.
+
+
+## Metodología Box-Jenkins
+La metodología Box-Jenkins es un enfoque sistemático que permite identificar, estimar y validar modelos ARMA o ARIMA que se ajusten adecuadamente a una serie de tiempo. Esta metodología consta de cuatro etapas principales:
+
+1. **Identificación del modelo**
+En esta etapa se analiza si la serie es estacionaria. Si no lo es, se aplican transformaciones (como la diferenciación) para lograr la estacionariedad. A continuación, se identifican los posibles valores de los parámetros del modelo ARIMA(p, d, q), con base en el análisis gráfico y estadístico.
+
+**Actividades comunes:**
+
+* Análisis gráfico: para detectar tendencia, estacionalidad o cambios en la media.
+
+* Prueba de estacionariedad: como la prueba de Dickey-Fuller, que evalúa si la serie tiene raíz unitaria.
+
+* Diferenciación: si la serie no es estacionaria, se aplica una o más veces para lograr la estacionariedad y determinar el parámetro d.
+
+* Revisión de ACF y PACF:
+
+ACF (autocorrelación): ayuda a identificar el orden q (media móvil).
+
+PACF (autocorrelación parcial): permite sugerir el orden p (autorregresivo).
+
+2. **Estimación de parámetros**
+Una vez identificado el modelo, se ajusta a los datos para estimar sus parámetros.
+
+**Actividades:**
+
+* Estimar los coeficientes mediante métodos como máxima verosimilitud.
+
+* Evaluar la significancia estadística de los parámetros.
+
+* Comparar modelos alternativos utilizando criterios como:
+
+AIC (Criterio de Información de Akaike)
+
+BIC (Criterio de Información Bayesiano)
+
+RMSE (Raíz del error cuadrático medio)
+
+3. **Verificación del modelo**
+Se valida que los residuos del modelo se comporten como ruido blanco, es decir, que no presenten autocorrelación y tengan media cero y varianza constante.
+
+**Actividades:**
+
+* Analizar los residuos en el tiempo.
+
+* Revisar los gráficos de ACF y PACF de los residuos.
+
+* Verificar la normalidad mediante histogramas o pruebas como Shapiro-Wilk.
+
+* Verificar independencia mediante pruebas como Ljung-Box.
+
+Si los supuestos no se cumplen, se debe reconsiderar el modelo y repetir las etapas anteriores.
+
+4. **Pronóstico**
+Una vez validado el modelo, se procede a generar pronósticos a corto, mediano o largo plazo.
+
+**Actividades:**
+
+* Generar predicciones con intervalos de confianza.
+
+* Comparar los pronósticos con datos reales (si están disponibles).
+
+* Evaluar la precisión del modelo predictivo.
+
+<!--chapter:end:ARIMA.Rmd-->
+
+`r if (knitr:::is_html_output()) '
+# Referencias {-}
+'`
+
+<!--chapter:end:06-references.Rmd-->
 
