@@ -188,13 +188,13 @@ El modelo Prophet no es una regresión como tal, mas bien es una descomposicion 
 $$y(t)=g(t)+s(t)+h(t)+\epsilon_{t}$$
 donde:
 
-$g(t): tendencia$
+$g(t):$ tendencia
 
-$s(t): estacionalidad$
+$s(t)$: estacionalidad
 
-$g(t): efecto de dias festivos$
+$g(t)$: efecto de días festivos
 
-$\epsilon_{t}: error (ruido blanco)$
+$\epsilon_{t}$: error (ruido blanco)
 
 dado que este metodo solo busca pronosticar valores futuros, no es necesario validar supuestos de normalidad en los errores, sin embargo si se debe verificar como una buena practica, que estos no estén correlacionados y que tengan media cero y varianza constante[@prophet_doc].
 
