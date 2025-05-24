@@ -23,7 +23,7 @@
 <meta name="author" content="Dany Enriquez" />
 
 
-<meta name="date" content="2025-05-21" />
+<meta name="date" content="2025-05-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,8 +54,6 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <script src="libs/plotly-binding-4.10.4/plotly.js"></script>
@@ -214,6 +212,12 @@ div.csl-indent {
 <li class="chapter" data-level="5.5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#pronosticos-1"><i class="fa fa-check"></i><b>5.5</b> Pronosticos</a></li>
 <li class="chapter" data-level="5.6" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#gráfico-de-pronosticos"><i class="fa fa-check"></i><b>5.6</b> Gráfico de Pronosticos</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><i class="fa fa-check"></i><b>6</b> Regresion de una Serie y Algoritmo Facebook´s Prophet</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#regresión-de-una-serie"><i class="fa fa-check"></i><b>6.1</b> Regresión de una serie</a></li>
+<li class="chapter" data-level="6.2" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#algoritmo-facebooks-prophet"><i class="fa fa-check"></i><b>6.2</b> Algoritmo Facebook´s Prophet</a></li>
+<li class="chapter" data-level="6.3" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#verificación-de-los-residuos"><i class="fa fa-check"></i><b>6.3</b> Verificación de los residuos</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -243,7 +247,7 @@ div.csl-indent {
 <p><strong>verificacion de ceros en la serie</strong></p>
 <pre><code>## [1] 0</code></pre>
 <pre><code>## [1] 0</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
 <p>Se observa una estacionalidad bien definida en la serie, lo que indica patrones recurrentes a lo largo del tiempo. En cuanto a la tendencia, se aprecia una disminución progresiva del consumo semanal hasta aproximadamente mediados del año 2016, momento en el que la serie parece estabilizarse. Esta variación en la tendencia sugiere que la media no se mantiene constante, lo cual indica que la serie no es estacionaria en media. Además, los residuos presentan picos pronunciados, lo que evidencia la presencia de valores atípicos y posibles cambios en la varianza a lo largo del tiempo.</p>
 </div>
 <div id="estacionariedad" class="section level2 hasAnchor" number="3.2">
@@ -253,7 +257,7 @@ div.csl-indent {
 ##  Augmented Dickey-Fuller Test
 ## 
 ## data:  serie_log
-## Dickey-Fuller = -2.4373, Lag order = 4, p-value = 0.3948
+## Dickey-Fuller = -2.2684, Lag order = 4, p-value = 0.465
 ## alternative hypothesis: stationary</code></pre>
 <p>En este sentido se valida el hecho de que la serie no es estacionaria, es decir, no presenta media, varianza y covarianza constante.</p>
 </div>
@@ -261,12 +265,12 @@ div.csl-indent {
 <h2><span class="header-section-number">3.3</span> Resultados de la Descomposicion y Estacionariedad<a href="prepocesamiento-de-datos.html#resultados-de-la-descomposicion-y-estacionariedad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A partir de lo observado, se concluye que es necesaria una transformación para estabilizar tanto la media como la varianza de la serie temporal <span class="citation">(<a href="#ref-hyndman2021forecasting">Hyndman and Athanasopoulos 2021</a>)</span>. Por ello, se aplicará una transformación logarítmica con el fin de reducir la variabilidad, seguida de una diferenciación para eliminar la tendencia y lograr una media más constante en el tiempo.</p>
 <p><strong>Primera Diferenciación</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-1.png" width="672" /><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-22-2.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-70-1.png" width="672" /><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-70-2.png" width="672" /></p>
 <pre><code>## 
 ##  Augmented Dickey-Fuller Test
 ## 
 ## data:  serie_log_diff
-## Dickey-Fuller = -5.1411, Lag order = 4, p-value = 0.01
+## Dickey-Fuller = -4.1343, Lag order = 4, p-value = 0.01
 ## alternative hypothesis: stationary</code></pre>
 <p>En este caso al diferenciar la serie una vez se verifica la estacionariedad.</p>
 </div>
@@ -337,6 +341,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

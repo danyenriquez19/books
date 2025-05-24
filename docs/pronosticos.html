@@ -23,7 +23,7 @@
 <meta name="author" content="Dany Enriquez" />
 
 
-<meta name="date" content="2025-05-21" />
+<meta name="date" content="2025-05-23" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -54,8 +54,6 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <script src="libs/plotly-binding-4.10.4/plotly.js"></script>
@@ -214,6 +212,12 @@ div.csl-indent {
 <li class="chapter" data-level="5.5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#pronosticos-1"><i class="fa fa-check"></i><b>5.5</b> Pronosticos</a></li>
 <li class="chapter" data-level="5.6" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#gráfico-de-pronosticos"><i class="fa fa-check"></i><b>5.6</b> Gráfico de Pronosticos</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><i class="fa fa-check"></i><b>6</b> Regresion de una Serie y Algoritmo Facebook´s Prophet</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#regresión-de-una-serie"><i class="fa fa-check"></i><b>6.1</b> Regresión de una serie</a></li>
+<li class="chapter" data-level="6.2" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#algoritmo-facebooks-prophet"><i class="fa fa-check"></i><b>6.2</b> Algoritmo Facebook´s Prophet</a></li>
+<li class="chapter" data-level="6.3" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#verificación-de-los-residuos"><i class="fa fa-check"></i><b>6.3</b> Verificación de los residuos</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -242,15 +246,15 @@ div.csl-indent {
 <p>La metodología de Holt-Winters, también conocida como suavizamiento exponencial triple, es una técnica ampliamente utilizada en el análisis de series temporales para realizar pronósticos que presentan patrones de tendencia y estacionalidad. Esta metodología extiende el suavizamiento exponencial simple incorporando componentes adicionales que permiten capturar dinámicamente la evolución de la tendencia y la estacionalidad a lo largo del tiempo. Holt-Winters se presenta en dos variantes principales: aditiva y multiplicativa, dependiendo de la naturaleza del componente estacional. Es particularmente útil en contextos donde los datos muestran fluctuaciones regulares en intervalos específicos (como días, semanas o meses), y permite generar predicciones a corto y mediano plazo con un alto grado de precisión. Su implementación práctica ha demostrado ser eficaz en áreas como la economía, la meteorología, la gestión de inventarios y el consumo de recursos, como agua o energía<span class="citation">(<a href="#ref-HurtadoGarzon2013">Hurtado Garzón 2013</a>)</span>.</p>
 <p>Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.</p>
 <p>Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
-<pre><code>## RMSE: 0.5675931</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<pre><code>## RMSE: 0.7559494</code></pre>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
 <p>Se observa que los valores pronosticados se ajustan adecuadamente al comportamiento general de la serie; sin embargo, tienden a sobreestimar los valores reales.</p>
 </div>
 <div id="analisis-de-los-residuos" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analisis de los Residuos<a href="pronosticos.html#analisis-de-los-residuos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Examinaremos los residuos del modelo para evaluar si este ha logrado capturar adecuadamente la estructura subyacente de la serie temporal.</p>
 <p><strong>QQ-plot</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
 <p>Se observa</p>
 <p><strong>Prueba de Shapiro-Wilks</strong></p>
 <pre><code>## 
@@ -260,10 +264,10 @@ div.csl-indent {
 ## W = 0.79869, p-value = 7.341e-08</code></pre>
 <p>Los residuos no siguen una distribución Normal.</p>
 <p><strong>Autocorrelacion</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
 <p>El gráfico ACF de los residuos muestra que no hay autocorrelaciones significativas en los rezagos. Esto sugiere que los residuos son independientes en el tiempo, y por tanto, que el modelo ha logrado capturar adecuadamente la estructura temporal de la serie.</p>
 <p><strong>Homocedasticidad</strong> varianza constante</p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
 <p>No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.</p>
 <p>En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.</p>
 
@@ -335,6 +339,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

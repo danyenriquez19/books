@@ -18,7 +18,7 @@ Un modelo ARIMA se denota como ARIMA(p, d, q), donde:
 
 * q: número de términos de medias móviles (MA).
 
-Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados.
+Estos modelos permiten describir y pronosticar el comportamiento de una serie de tiempo a partir de sus valores y errores pasados [@HurtadoGarzon2013].
 
 
 ## Metodología Box-Jenkins
@@ -88,7 +88,7 @@ Cabe resaltar que actualmente se dispone de la librería forecast en R, la cual 
 
 Gracias a esta automatización, se simplifican varios pasos tradicionales del proceso de modelado, como la inspección visual de los gráficos ACF y PACF, la identificación manual del grado de diferenciación d, y la evaluación de múltiples combinaciones de parámetros para encontrar el mejor modelo.
 
-Por tanto, en esta etapa nos enfocaremos únicamente en la validación de los supuestos del modelo sobre los residuos y en la evaluación del desempeño de los pronósticos. 
+Por tanto, en esta etapa nos enfocaremos únicamente en la validación de los supuestos del modelo sobre los residuos y en la evaluación del desempeño de los pronósticos [@HurtadoGarzon2013]. 
 
 ## Modelado
 
@@ -169,3 +169,151 @@ legend("topleft", legend = c("Predicción", "Real"), col = c("blue", "red"), lty
 
 ```
 
+# Regresion de una Serie y Algoritmo Facebook´s Prophet
+
+## Regresión de una serie
+
+El proceso de transformar una serie en una regresión consiste en usar sus valores pasados(lags) para predecir valores futuros, esto se logra mediante la creación de variables $y_{t-1}$, $y_{t-2}$, en general $y_{t-k}$ para algun k entero y un tiempo t de manera que lo valores $y_{t}$ se puedan estimar mediante el modelo:
+
+$$y_{t}=\beta_{0}+\beta_{1}y_{t-1}+...+\beta_{k}y_{t-k}+\epsilon_{t}$$
+esta es la forma de una regresión lineal autoregresiva AR(p)[@hamilton1994time].Ademas de esta forma se pueden agregar un conjunto de variables externas $X_{t}$, de forma que el modelo se convierte en:
+$$y_{t}=\beta_{0}+\beta_{1}y_{t-1}+...+\beta_{k}y_{t-k}+\beta_{k+1}X_{t}+\epsilon_{t}$$
+denominado modelo ARX [@ljung1999system]
+
+## Algoritmo Facebook´s Prophet
+
+Prophet es un algoritmo desarrollado por el equipo de investigacion de facebook para el pronostico de series de tiempo, su finalidad es la robustez frente a datos faltantes, cambios en la tendencia y multiples estacionalidades.
+El modelo Prophet no es una regresión como tal, mas bien es una descomposicion de forma aditiva, ya que se asume una descomposicion de la serie de la siguiente forma:
+
+$$y(t)=g(t)+s(t)+h(t)+\epsilon_{t}$$
+donde:
+
+$g(t): tendencia$
+
+$s(t): estacionalidad$
+
+$g(t): efecto de dias festivos$
+
+$\epsilon_{t}: error (ruido blanco)$
+
+dado que este metodo solo busca pronosticar valores futuros, no es necesario validar supuestos de normalidad en los errores, sin embargo si se debe verificar como una buena practica, que estos no estén correlacionados y que tengan media cero y varianza constante[@prophet_doc].
+
+```{r,echo=FALSE}
+library(prophet)
+library(dplyr)
+library(plotly)
+
+# Parámetros
+h <- 10
+n <- length(serie_log)
+
+# Crear fechas semanales
+fechas <- seq.Date(from = as.Date("2020-01-01"), by = "week", length.out = n)
+
+# Crear data.frame para Prophet
+datos_prophet <- data.frame(ds = fechas, y = as.numeric(serie_log))
+
+# Dividir en entrenamiento y prueba
+train_prophet <- datos_prophet[1:(n - h), ]
+test_prophet  <- datos_prophet[(n - h + 1):n, ]
+
+# Ajustar modelo Prophet
+modelo_prophet <- prophet(train_prophet,
+                         seasonality.mode = "multiplicative",
+                         weekly.seasonality = TRUE,
+                         daily.seasonality = FALSE,
+                         yearly.seasonality = FALSE)
+
+# Crear fechas futuras
+future_prophet <- make_future_dataframe(modelo_prophet, periods = h, freq = "week")
+
+# Generar predicción
+prediccion_prophet <- predict(modelo_prophet, future_prophet)
+
+# Extraer predicción para test
+yhat_test <- tail(prediccion_prophet$yhat, h)
+
+# Preparar data para plotly
+serie_df <- data.frame(ds = fechas, value = serie_log)
+test_df <- test_prophet %>% select(ds, y)
+pred_df <- data.frame(ds = test_prophet$ds, y = yhat_test)
+
+# Crear plotly
+fig <- plot_ly()
+
+# Serie logarítmica completa - línea negra
+fig <- fig %>%
+  add_lines(x = serie_df$ds, y = serie_df$value,
+            name = "Serie Logarítmica Completa",
+            line = list(color = "black", width = 2))
+
+# Valores reales test - puntos y líneas rojas
+fig <- fig %>%
+  add_lines(x = test_df$ds, y = test_df$y,
+            name = "Valores Test Reales",
+            line = list(color = "red", width = 2)) %>%
+  add_markers(x = test_df$ds, y = test_df$y,
+              marker = list(color = "red", size = 6))
+
+# Predicción test - puntos y líneas azules
+fig <- fig %>%
+  add_lines(x = pred_df$ds, y = pred_df$y,
+            name = "Predicción Prophet",
+            line = list(color = "blue", width = 2)) %>%
+  add_markers(x = pred_df$ds, y = pred_df$y,
+              marker = list(color = "blue", size = 6))
+
+# Layout
+fig <- fig %>%
+  layout(title = "Serie Logarítmica, valores test y predicción Prophet",
+         xaxis = list(title = "Fecha"),
+         yaxis = list(title = "Log Consumo"))
+
+# Mostrar gráfico interactivo
+fig
+
+
+```
+
+```{r,echo=FALSE}
+prophet_plot_components(modelo_prophet, prediccion_prophet)
+
+```
+
+De acuerdo a las gráficas se observa que el algoritmo no esta capturando la escencia de la serie, ya que el modelo se ve muy lineal en comparación a la serie original y solo esta teniendo en cuenta la estacionalidad semanal y la tendencia ya que no se cuenta con días festivos.
+
+## Verificación de los residuos
+
+**Gráfico, media**
+
+```{r,echo=FALSE}
+# Calcular residuos en test
+residuos_pro<- test_prophet$y - yhat_test
+# Gráfico de residuos
+plot(test_prophet$ds, residuos_pro, type = "o", col = "purple", lwd = 2,
+     main = "Residuos de la predicción Prophet (en test)",
+     xlab = "Fecha", ylab = "Residuo")
+abline(h = 0, col = "gray", lty = 2)
+# Promedio y desviación estándar
+mean_res <- mean(residuos)
+sd_res <- sd(residuos)
+
+cat("Media de residuos:", round(mean_res, 4), "\n")
+cat("Desviación estándar de residuos:", round(sd_res, 4), "\n")
+
+
+```
+
+**Correlación**
+
+```{r}
+# Test de Ljung-Box para autocorrelación en residuos
+Box.test(residuos_pro, lag = 5, type = "Ljung-Box")
+
+```
+
+no hay correlación significativa en los residuos.
+
+## Conclusion
+
+Aunque el modelo cumple con los supuestos generales requeridos, no logra capturar completamente la dinámica de la serie. Esto se evidencia en la naturaleza lineal de sus pronósticos, lo que sugiere que aún existe estructura en los datos que no está siendo modelada adecuadamente, por ende no se justifica para este caso tratar la serie como una regresion o apta para el modelo Prophet.

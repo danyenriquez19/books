@@ -1,7 +1,7 @@
 tab:diccionario-tabla
-tab:unnamed-chunk-7
-tab:unnamed-chunk-10
-tab:unnamed-chunk-12
+tab:unnamed-chunk-55
+tab:unnamed-chunk-58
+tab:unnamed-chunk-60
 importancia-del-análisis-del-consumo-de-agua
 analisis-exploratorio-de-datos
 selección-de-usuario
@@ -33,3 +33,7 @@ modelado
 validacion-de-supuestos-sobre-los-residuos
 pronosticos-1
 gráfico-de-pronosticos
+regresion-de-una-serie-y-algoritmo-facebooks-prophet
+regresión-de-una-serie
+algoritmo-facebooks-prophet
+verificación-de-los-residuos
