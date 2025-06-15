@@ -308,7 +308,7 @@ cat("Desviación estándar de residuos:", round(sd_res, 4), "\n")
 
 **Correlación**
 
-```{r}
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
 # Test de Ljung-Box para autocorrelación en residuos
 Box.test(residuos_pro, lag = 5, type = "Ljung-Box")
 
@@ -547,7 +547,7 @@ cat("RMSE:", rmse, "\n")
 
 ```
 
-```{r}
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
 library(plotly)
 
 # Fecha de inicio real
@@ -615,7 +615,7 @@ fig
 
 ### Red de JORDAN
 
-```{r}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(RSNNS)
 library(plotly)
 library(dplyr)
@@ -712,7 +712,7 @@ Se observa en las redes de ELMAN y JORDAN podemos observar que no se ajusta a lo
 
 A continuación, se analiza el desempeño de los distintos modelos empleados en este estudio. Para evaluar la calidad de los pronósticos, se utilizará tanto la representación visual de los resultados como el Error Cuadrático Medio (RMSE), una métrica ampliamente utilizada para medir la precisión de los modelos de predicción.
 
-```{r}
+```{r, echo=FALSE,message=FALSE,warning=FALSE}
 library(forecast)
 library(prophet)
 library(RSNNS)
@@ -837,7 +837,7 @@ fig
 
 ### RMSE
 
-```{r}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # --- Cálculo de RMSE para cada modelo ---
 rmse_hw     <- sqrt(mean((serie_test - pred_hw)^2))
 rmse_arima  <- sqrt(mean((serie_test - pred_arima)^2))
@@ -866,7 +866,7 @@ En contraste, el modelo de Holt-Winters, aunque sencillo y diseñado para captur
 Por lo tanto, si bien el RMSE es una métrica útil, es importante complementarla con un análisis visual y otras métricas para seleccionar el modelo más adecuado. Futuras evaluaciones podrían incluir indicadores como MAPE o MAE para tener una visión más completa del desempeño de los modelos.
 
 
-```{r}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 library(Metrics)
 
 # Función para calcular métricas

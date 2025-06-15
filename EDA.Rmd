@@ -571,7 +571,7 @@ abline(h = 0, col = "red")
 
 ```
 
-No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.
+No se observa algún patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atípicos.
 
 En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.
 

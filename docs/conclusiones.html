@@ -54,6 +54,8 @@
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
 <script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
 <script src="libs/plotly-binding-4.10.4/plotly.js"></script>
@@ -264,35 +266,6 @@ div.csl-indent {
 <p>Por otro lado, los modelos ARIMA, Prophet y Red Neuronal de Jordan mostraron resultados bastante similares en cuanto al RMSE y ofrecieron una representación visual más acorde al comportamiento de la serie. Esto sugiere que, aunque sus métricas no fueron las más bajas, pueden ser más adecuados si el objetivo es preservar la estructura y dinámica del consumo a lo largo del tiempo.</p>
 <p>En contraste, el modelo de Holt-Winters, aunque sencillo y diseñado para capturar estacionalidad y tendencia, evidenció un mayor error y una menor capacidad para seguir el patrón observado en los datos reales. Esto indica que los supuestos de estacionalidad o tendencia lineal propios de este modelo no fueron suficientes para representar adecuadamente la serie en este caso.</p>
 <p>Por lo tanto, si bien el RMSE es una métrica útil, es importante complementarla con un análisis visual y otras métricas para seleccionar el modelo más adecuado. Futuras evaluaciones podrían incluir indicadores como MAPE o MAE para tener una visión más completa del desempeño de los modelos.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="conclusiones.html#cb32-1" tabindex="-1"></a><span class="fu">library</span>(Metrics)</span>
-<span id="cb32-2"><a href="conclusiones.html#cb32-2" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="conclusiones.html#cb32-3" tabindex="-1"></a><span class="co"># Función para calcular métricas</span></span>
-<span id="cb32-4"><a href="conclusiones.html#cb32-4" tabindex="-1"></a>calcular_metricas <span class="ot">&lt;-</span> <span class="cf">function</span>(real, predicho) {</span>
-<span id="cb32-5"><a href="conclusiones.html#cb32-5" tabindex="-1"></a>  rmse_val <span class="ot">&lt;-</span> <span class="fu">rmse</span>(real, predicho)</span>
-<span id="cb32-6"><a href="conclusiones.html#cb32-6" tabindex="-1"></a>  mae_val <span class="ot">&lt;-</span> <span class="fu">mae</span>(real, predicho)</span>
-<span id="cb32-7"><a href="conclusiones.html#cb32-7" tabindex="-1"></a>  mape_val <span class="ot">&lt;-</span> <span class="fu">mape</span>(real, predicho) <span class="sc">*</span> <span class="dv">100</span></span>
-<span id="cb32-8"><a href="conclusiones.html#cb32-8" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(<span class="at">RMSE =</span> rmse_val, <span class="at">MAE =</span> mae_val, <span class="at">MAPE =</span> mape_val))</span>
-<span id="cb32-9"><a href="conclusiones.html#cb32-9" tabindex="-1"></a>}</span>
-<span id="cb32-10"><a href="conclusiones.html#cb32-10" tabindex="-1"></a></span>
-<span id="cb32-11"><a href="conclusiones.html#cb32-11" tabindex="-1"></a><span class="co"># Calcular métricas para cada modelo</span></span>
-<span id="cb32-12"><a href="conclusiones.html#cb32-12" tabindex="-1"></a>metricas_hw <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_hw)</span>
-<span id="cb32-13"><a href="conclusiones.html#cb32-13" tabindex="-1"></a>metricas_arima <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_arima)</span>
-<span id="cb32-14"><a href="conclusiones.html#cb32-14" tabindex="-1"></a>metricas_prophet <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_prophet)</span>
-<span id="cb32-15"><a href="conclusiones.html#cb32-15" tabindex="-1"></a>metricas_elman <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, predicciones)     <span class="co"># Red Elman</span></span>
-<span id="cb32-16"><a href="conclusiones.html#cb32-16" tabindex="-1"></a>metricas_jordan <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_jordan)     <span class="co"># Red Jordan</span></span>
-<span id="cb32-17"><a href="conclusiones.html#cb32-17" tabindex="-1"></a></span>
-<span id="cb32-18"><a href="conclusiones.html#cb32-18" tabindex="-1"></a><span class="co"># Crear tabla resumen</span></span>
-<span id="cb32-19"><a href="conclusiones.html#cb32-19" tabindex="-1"></a>tabla_metricas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb32-20"><a href="conclusiones.html#cb32-20" tabindex="-1"></a>  <span class="at">Modelo =</span> <span class="fu">c</span>(<span class="st">&quot;Holt-Winters&quot;</span>, <span class="st">&quot;ARIMA&quot;</span>, <span class="st">&quot;Prophet&quot;</span>, <span class="st">&quot;Elman&quot;</span>, <span class="st">&quot;Jordan&quot;</span>),</span>
-<span id="cb32-21"><a href="conclusiones.html#cb32-21" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;RMSE&quot;</span>], metricas_arima[<span class="st">&quot;RMSE&quot;</span>], metricas_prophet[<span class="st">&quot;RMSE&quot;</span>], </span>
-<span id="cb32-22"><a href="conclusiones.html#cb32-22" tabindex="-1"></a>           metricas_elman[<span class="st">&quot;RMSE&quot;</span>], metricas_jordan[<span class="st">&quot;RMSE&quot;</span>]),</span>
-<span id="cb32-23"><a href="conclusiones.html#cb32-23" tabindex="-1"></a>  <span class="at">MAE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;MAE&quot;</span>], metricas_arima[<span class="st">&quot;MAE&quot;</span>], metricas_prophet[<span class="st">&quot;MAE&quot;</span>], </span>
-<span id="cb32-24"><a href="conclusiones.html#cb32-24" tabindex="-1"></a>          metricas_elman[<span class="st">&quot;MAE&quot;</span>], metricas_jordan[<span class="st">&quot;MAE&quot;</span>]),</span>
-<span id="cb32-25"><a href="conclusiones.html#cb32-25" tabindex="-1"></a>  <span class="at">MAPE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;MAPE&quot;</span>], metricas_arima[<span class="st">&quot;MAPE&quot;</span>], metricas_prophet[<span class="st">&quot;MAPE&quot;</span>], </span>
-<span id="cb32-26"><a href="conclusiones.html#cb32-26" tabindex="-1"></a>           metricas_elman[<span class="st">&quot;MAPE&quot;</span>], metricas_jordan[<span class="st">&quot;MAPE&quot;</span>])</span>
-<span id="cb32-27"><a href="conclusiones.html#cb32-27" tabindex="-1"></a>)</span>
-<span id="cb32-28"><a href="conclusiones.html#cb32-28" tabindex="-1"></a></span>
-<span id="cb32-29"><a href="conclusiones.html#cb32-29" tabindex="-1"></a><span class="fu">print</span>(tabla_metricas)</span></code></pre></div>
 <pre><code>##         Modelo      RMSE       MAE     MAPE
 ## 1 Holt-Winters 0.7559494 0.3589265 5.330668
 ## 2        ARIMA 0.6739333 0.2661491 4.111245
