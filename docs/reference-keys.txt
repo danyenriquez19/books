@@ -1,7 +1,7 @@
 tab:diccionario-tabla
-tab:unnamed-chunk-64
-tab:unnamed-chunk-67
-tab:unnamed-chunk-69
+tab:unnamed-chunk-7
+tab:unnamed-chunk-10
+tab:unnamed-chunk-12
 importancia-del-análisis-del-consumo-de-agua
 analisis-exploratorio-de-datos
 selección-de-usuario

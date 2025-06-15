@@ -266,14 +266,14 @@ div.csl-indent {
 <p>Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.</p>
 <p>Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
 <pre><code>## RMSE: 0.7559494</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p>Se observa que los valores pronosticados se ajustan adecuadamente al comportamiento general de la serie; sin embargo, tienden a sobreestimar los valores reales.</p>
 </div>
 <div id="analisis-de-los-residuos" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analisis de los Residuos<a href="pronosticos.html#analisis-de-los-residuos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Examinaremos los residuos del modelo para evaluar si este ha logrado capturar adecuadamente la estructura subyacente de la serie temporal.</p>
 <p><strong>QQ-plot</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>Se observa</p>
 <p><strong>Prueba de Shapiro-Wilks</strong></p>
 <pre><code>## 
@@ -283,10 +283,10 @@ div.csl-indent {
 ## W = 0.79869, p-value = 7.341e-08</code></pre>
 <p>Los residuos no siguen una distribución Normal.</p>
 <p><strong>Autocorrelacion</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-83-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>El gráfico ACF de los residuos muestra que no hay autocorrelaciones significativas en los rezagos. Esto sugiere que los residuos son independientes en el tiempo, y por tanto, que el modelo ha logrado capturar adecuadamente la estructura temporal de la serie.</p>
 <p><strong>Homocedasticidad</strong> varianza constante</p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.</p>
 <p>En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.</p>
 
