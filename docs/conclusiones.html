@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
-  <meta name="description" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <title>Capítulo 9 Conclusiones | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
+  <meta name="description" content="Capítulo 9 Conclusiones | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta property="og:title" content="Capítulo 9 Conclusiones | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Capítulo 3 Prepocesamiento de Datos | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta name="twitter:title" content="Capítulo 9 Conclusiones | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="analisis-exploratorio-de-datos.html"/>
-<link rel="next" href="pronosticos.html"/>
+<link rel="prev" href="resutados-y-conclusiones..html"/>
+<link rel="next" href="referencias.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -258,55 +258,60 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="prepocesamiento-de-datos" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Capítulo 3</span> Prepocesamiento de Datos<a href="prepocesamiento-de-datos.html#prepocesamiento-de-datos" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="descomposicion-de-la-serie" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Descomposicion de la Serie<a href="prepocesamiento-de-datos.html#descomposicion-de-la-serie" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Dada la variabilidad en los niveles de la serie y la presencia de una estacionalidad cuya amplitud cambia en función del tiempo, se optó por aplicar una descomposición multiplicativa. Para ello, se realizó una transformación logarítmica previa sobre la serie, lo que permite utilizar un enfoque aditivo con el método stl(), manteniendo así la naturaleza multiplicativa de los componentes al interpretar los resultados en la escala original.</p>
-<p><strong>verificacion de ceros en la serie</strong></p>
-<pre><code>## [1] 0</code></pre>
-<pre><code>## [1] 0</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
-<p>Se observa una estacionalidad bien definida en la serie, lo que indica patrones recurrentes a lo largo del tiempo. En cuanto a la tendencia, se aprecia una disminución progresiva del consumo semanal hasta aproximadamente mediados del año 2016, momento en el que la serie parece estabilizarse. Esta variación en la tendencia sugiere que la media no se mantiene constante, lo cual indica que la serie no es estacionaria en media. Además, los residuos presentan picos pronunciados, lo que evidencia la presencia de valores atípicos y posibles cambios en la varianza a lo largo del tiempo.</p>
-</div>
-<div id="estacionariedad" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Estacionariedad<a href="prepocesamiento-de-datos.html#estacionariedad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Para validar lo anteriormente expuesto, realizaremos la prueba de Dickey-Fuller</p>
-<pre><code>## 
-##  Augmented Dickey-Fuller Test
-## 
-## data:  serie_log
-## Dickey-Fuller = -2.2684, Lag order = 4, p-value = 0.465
-## alternative hypothesis: stationary</code></pre>
-<p>En este sentido se valida el hecho de que la serie no es estacionaria, es decir, no presenta media, varianza y covarianza constante.</p>
-</div>
-<div id="resultados-de-la-descomposicion-y-estacionariedad" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Resultados de la Descomposicion y Estacionariedad<a href="prepocesamiento-de-datos.html#resultados-de-la-descomposicion-y-estacionariedad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A partir de lo observado, se concluye que es necesaria una transformación para estabilizar tanto la media como la varianza de la serie temporal <span class="citation">(<a href="#ref-hyndman2021forecasting">Hyndman and Athanasopoulos 2021</a>)</span>. Por ello, se aplicará una transformación logarítmica con el fin de reducir la variabilidad, seguida de una diferenciación para eliminar la tendencia y lograr una media más constante en el tiempo.</p>
-<p><strong>Primera Diferenciación</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-79-1.png" width="672" /><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-79-2.png" width="672" /></p>
-<pre><code>## 
-##  Augmented Dickey-Fuller Test
-## 
-## data:  serie_log_diff
-## Dickey-Fuller = -4.1343, Lag order = 4, p-value = 0.01
-## alternative hypothesis: stationary</code></pre>
-<p>En este caso al diferenciar la serie una vez se verifica la estacionariedad.</p>
-</div>
-</div>
-<h3>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-hyndman2021forecasting" class="csl-entry">
-Hyndman, Rob J., and George Athanasopoulos. 2021. <em>Forecasting: Principles and Practice</em>. 3rd ed. OTexts. <a href="https://otexts.com/fpp3/transformations.html">https://otexts.com/fpp3/transformations.html</a>.
-</div>
+<div id="conclusiones" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Capítulo 9</span> Conclusiones<a href="conclusiones.html#conclusiones" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>A partir de los resultados obtenidos, se puede concluir que, si bien la Red Neuronal de Elman presentó el mejor desempeño cuantitativo según la métrica RMSE, este valor no necesariamente se traduce en un mejor ajuste visual al comportamiento real de la serie. Al observar las predicciones generadas por este modelo, es evidente que, a pesar de su buen rendimiento numérico, no logra capturar adecuadamente las fluctuaciones y patrones del consumo semanal.</p>
+<p>Por otro lado, los modelos ARIMA, Prophet y Red Neuronal de Jordan mostraron resultados bastante similares en cuanto al RMSE y ofrecieron una representación visual más acorde al comportamiento de la serie. Esto sugiere que, aunque sus métricas no fueron las más bajas, pueden ser más adecuados si el objetivo es preservar la estructura y dinámica del consumo a lo largo del tiempo.</p>
+<p>En contraste, el modelo de Holt-Winters, aunque sencillo y diseñado para capturar estacionalidad y tendencia, evidenció un mayor error y una menor capacidad para seguir el patrón observado en los datos reales. Esto indica que los supuestos de estacionalidad o tendencia lineal propios de este modelo no fueron suficientes para representar adecuadamente la serie en este caso.</p>
+<p>Por lo tanto, si bien el RMSE es una métrica útil, es importante complementarla con un análisis visual y otras métricas para seleccionar el modelo más adecuado. Futuras evaluaciones podrían incluir indicadores como MAPE o MAE para tener una visión más completa del desempeño de los modelos.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="conclusiones.html#cb32-1" tabindex="-1"></a><span class="fu">library</span>(Metrics)</span>
+<span id="cb32-2"><a href="conclusiones.html#cb32-2" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="conclusiones.html#cb32-3" tabindex="-1"></a><span class="co"># Función para calcular métricas</span></span>
+<span id="cb32-4"><a href="conclusiones.html#cb32-4" tabindex="-1"></a>calcular_metricas <span class="ot">&lt;-</span> <span class="cf">function</span>(real, predicho) {</span>
+<span id="cb32-5"><a href="conclusiones.html#cb32-5" tabindex="-1"></a>  rmse_val <span class="ot">&lt;-</span> <span class="fu">rmse</span>(real, predicho)</span>
+<span id="cb32-6"><a href="conclusiones.html#cb32-6" tabindex="-1"></a>  mae_val <span class="ot">&lt;-</span> <span class="fu">mae</span>(real, predicho)</span>
+<span id="cb32-7"><a href="conclusiones.html#cb32-7" tabindex="-1"></a>  mape_val <span class="ot">&lt;-</span> <span class="fu">mape</span>(real, predicho) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb32-8"><a href="conclusiones.html#cb32-8" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(<span class="at">RMSE =</span> rmse_val, <span class="at">MAE =</span> mae_val, <span class="at">MAPE =</span> mape_val))</span>
+<span id="cb32-9"><a href="conclusiones.html#cb32-9" tabindex="-1"></a>}</span>
+<span id="cb32-10"><a href="conclusiones.html#cb32-10" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="conclusiones.html#cb32-11" tabindex="-1"></a><span class="co"># Calcular métricas para cada modelo</span></span>
+<span id="cb32-12"><a href="conclusiones.html#cb32-12" tabindex="-1"></a>metricas_hw <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_hw)</span>
+<span id="cb32-13"><a href="conclusiones.html#cb32-13" tabindex="-1"></a>metricas_arima <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_arima)</span>
+<span id="cb32-14"><a href="conclusiones.html#cb32-14" tabindex="-1"></a>metricas_prophet <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_prophet)</span>
+<span id="cb32-15"><a href="conclusiones.html#cb32-15" tabindex="-1"></a>metricas_elman <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, predicciones)     <span class="co"># Red Elman</span></span>
+<span id="cb32-16"><a href="conclusiones.html#cb32-16" tabindex="-1"></a>metricas_jordan <span class="ot">&lt;-</span> <span class="fu">calcular_metricas</span>(serie_test, pred_jordan)     <span class="co"># Red Jordan</span></span>
+<span id="cb32-17"><a href="conclusiones.html#cb32-17" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="conclusiones.html#cb32-18" tabindex="-1"></a><span class="co"># Crear tabla resumen</span></span>
+<span id="cb32-19"><a href="conclusiones.html#cb32-19" tabindex="-1"></a>tabla_metricas <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb32-20"><a href="conclusiones.html#cb32-20" tabindex="-1"></a>  <span class="at">Modelo =</span> <span class="fu">c</span>(<span class="st">&quot;Holt-Winters&quot;</span>, <span class="st">&quot;ARIMA&quot;</span>, <span class="st">&quot;Prophet&quot;</span>, <span class="st">&quot;Elman&quot;</span>, <span class="st">&quot;Jordan&quot;</span>),</span>
+<span id="cb32-21"><a href="conclusiones.html#cb32-21" tabindex="-1"></a>  <span class="at">RMSE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;RMSE&quot;</span>], metricas_arima[<span class="st">&quot;RMSE&quot;</span>], metricas_prophet[<span class="st">&quot;RMSE&quot;</span>], </span>
+<span id="cb32-22"><a href="conclusiones.html#cb32-22" tabindex="-1"></a>           metricas_elman[<span class="st">&quot;RMSE&quot;</span>], metricas_jordan[<span class="st">&quot;RMSE&quot;</span>]),</span>
+<span id="cb32-23"><a href="conclusiones.html#cb32-23" tabindex="-1"></a>  <span class="at">MAE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;MAE&quot;</span>], metricas_arima[<span class="st">&quot;MAE&quot;</span>], metricas_prophet[<span class="st">&quot;MAE&quot;</span>], </span>
+<span id="cb32-24"><a href="conclusiones.html#cb32-24" tabindex="-1"></a>          metricas_elman[<span class="st">&quot;MAE&quot;</span>], metricas_jordan[<span class="st">&quot;MAE&quot;</span>]),</span>
+<span id="cb32-25"><a href="conclusiones.html#cb32-25" tabindex="-1"></a>  <span class="at">MAPE =</span> <span class="fu">c</span>(metricas_hw[<span class="st">&quot;MAPE&quot;</span>], metricas_arima[<span class="st">&quot;MAPE&quot;</span>], metricas_prophet[<span class="st">&quot;MAPE&quot;</span>], </span>
+<span id="cb32-26"><a href="conclusiones.html#cb32-26" tabindex="-1"></a>           metricas_elman[<span class="st">&quot;MAPE&quot;</span>], metricas_jordan[<span class="st">&quot;MAPE&quot;</span>])</span>
+<span id="cb32-27"><a href="conclusiones.html#cb32-27" tabindex="-1"></a>)</span>
+<span id="cb32-28"><a href="conclusiones.html#cb32-28" tabindex="-1"></a></span>
+<span id="cb32-29"><a href="conclusiones.html#cb32-29" tabindex="-1"></a><span class="fu">print</span>(tabla_metricas)</span></code></pre></div>
+<pre><code>##         Modelo      RMSE       MAE     MAPE
+## 1 Holt-Winters 0.7559494 0.3589265 5.330668
+## 2        ARIMA 0.6739333 0.2661491 4.111245
+## 3      Prophet 0.6905790 0.2830576 4.340527
+## 4        Elman 0.6714161 0.2638023 4.079320
+## 5       Jordan 0.6775604 0.2684218 4.143904</code></pre>
+<p>Los resultados obtenidos a partir de las métricas de evaluación muestran que la Red Neuronal de Elman fue el modelo con mejor desempeño global, presentando el menor RMSE (0.6714), MAE (0.2638) y MAPE (4.08%), lo que indica un mejor ajuste en términos de error absoluto y relativo. Le siguieron de cerca los modelos ARIMA y Red Neuronal de Jordan, con diferencias mínimas respecto al modelo de Elman.</p>
+<p>Sin embargo, es importante destacar que, a pesar de los buenos resultados numéricos, el comportamiento visual de las predicciones evidenció ciertas limitaciones en la capacidad de algunos modelos para capturar fielmente la dinámica real de la serie temporal, especialmente en lo que respecta a fluctuaciones puntuales.</p>
+<p>En contraste, el modelo Holt-Winters presentó el peor desempeño en todas las métricas evaluadas, lo que sugiere que sus supuestos de tendencia y estacionalidad no fueron suficientes para describir adecuadamente el comportamiento del consumo analizado.</p>
+<p>En síntesis, Elman se posiciona como el mejor modelo desde el punto de vista cuantitativo, pero la selección definitiva del modelo ideal dependerá del balance entre precisión numérica y fidelidad visual respecto a la serie real. Para futuras investigaciones se recomienda complementar este análisis con otras métricas y validaciones, así como explorar ajustes adicionales en los hiperparámetros de las redes neuronales.</p>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="analisis-exploratorio-de-datos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="pronosticos.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="resutados-y-conclusiones..html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -337,7 +342,7 @@ gitbook.start({
     "size": 2
   },
   "edit": {
-    "link": "https://github.com/rstudio/bookdown-demo/edit/master/EDA.Rmd",
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/ARIMA.Rmd",
     "text": "Edit"
   },
   "history": {

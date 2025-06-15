@@ -198,6 +198,8 @@ $\epsilon_{t}$: error (ruido blanco)
 
 dado que este metodo solo busca pronosticar valores futuros, no es necesario validar supuestos de normalidad en los errores, sin embargo si se debe verificar como una buena practica, que estos no estén correlacionados y que tengan media cero y varianza constante[@prophet_doc].
 
+## Modelado
+
 ```{r,echo=FALSE}
 library(prophet)
 library(dplyr)
@@ -317,3 +319,589 @@ no hay correlación significativa en los residuos.
 ## Conclusion
 
 Aunque el modelo cumple con los supuestos generales requeridos, no logra capturar completamente la dinámica de la serie. Esto se evidencia en la naturaleza lineal de sus pronósticos, lo que sugiere que aún existe estructura en los datos que no está siendo modelada adecuadamente, por ende no se justifica para este caso tratar la serie como una regresion o apta para el modelo Prophet.
+
+
+# Redes Neuronales Recurrentes
+
+## Redes Neuronales (ANN)
+
+Una red neuronal artificial es un modelo computacional inspirado en el funcionamiento del cerebro humano. Este modelo conecta neuronas artificiales a través de capas, y es capaz de generar respuestas basadas en el aprendizaje obtenido a partir de los datos utilizados durante el entrenamiento.
+
+Su estructura fundamental se compone de tres tipos de capas:
+
+Una capa de entrada (input layer), que recibe los datos de entrada.
+
+Una o más capas ocultas (hidden layers), responsables de procesar la información y aprender patrones complejos.
+
+Una capa de salida (output layer), que entrega el resultado final de la red.
+
+Las neuronas están interconectadas mediante pesos (weights), donde cada peso representa la influencia que una entrada tiene sobre la salida. Además, cada neurona incorpora un sesgo (bias), que permite ajustar la salida de la neurona incluso en ausencia de entrada, brindando mayor flexibilidad al modelo[@Hilera2000].
+
+Desde el punto de vista matemático las neuronas funcionan mediante las siguientes operaciones:
+
+sean: 
+
+* $x_{i}:$ la entrada i-esima a la red neuronal.
+
+* $w_{i}:$ el peso asociado a la i-esima entrada.
+
+* $b_{i}:$ sesgo() parámetro adicional que permite desplazar la función de activación, para dotar de flexibilidad al modelo para obtener un mejor ajuste a los datos)
+
+* $z:$ combinación lineal de las entradas con los pesos, sumado con el sesgo
+
+$$z=\sum_{i=1}^{n}w_{i}x_{i}+b$$
+
+Posteriormente, se aplica una función de activación $\phi(z)$, que introduce no linealidad en el modelo, permitiendo así representar relaciones más complejas. La salida de la neurona $a$ se obtiene como:
+
+$$a=\phi(z)$$
+
+Cabe destacar que la función de activación cumple el propósito de activar una neurona cuando la combinación lineal de sus entradas alcanza cierto valor. Esta función introduce no linealidad en el modelo, lo que permite que la red neuronal pueda aprender relaciones complejas entre los datos. A medida que las neuronas se activan, se propaga la información a través de las diferentes capas de la red.
+
+Existen diversas funciones de activación, cada una con características específicas y aplicaciones particulares. Entre las más utilizadas se encuentran:
+
+**Función Sigmoide**
+
+$$\phi(z)=\frac{1}{1+e^{-z}}$$
+
+esta función tiene dominio $(-\infty,\infty)$, su rango esta en (0,1), muy usado para modelos que implican clasificación binaria.
+
+**Función Tangente hiperbólica**
+
+$$\phi(z)=\frac{e^{z}-e^{-z}}{e^{z}+e^{-z}}$$
+
+esta función tiene dominio $(-\infty,\infty)$ y rango $(-1,1)$, muy usada debido a que se encuentra centrada en 0, facilitando el aprendizaje de algunas redes.
+
+
+**ReLU (Rectified Linear Unit)**
+
+$$\phi(z)=max(0,z)$$
+
+esta función tiene dominio $(-\infty,\infty)$ y rango $[0,\infty)$, es muy usada ya que permite que de manera eficiente la convergencia del entrenamiento, sin embargo es muy propensa a crear neuronas con salidas cero cuando z es negativo.
+
+## Redes Neuronales Recurrentes (RNN)     
+
+Una red neuronal recurrente (RNN) es un tipo de red neuronal diseñada específicamente para el procesamiento de secuencias o datos temporales. A diferencia de las redes neuronales tradicionales, las RNN incorporan un mecanismo de memoria que les permite conservar información sobre eventos anteriores. Esta capacidad las hace especialmente útiles para tareas donde el contexto previo influye en la predicción, como la anticipación de eventos futuros a partir de patrones pasados.
+
+Su funcionamiento se basa en una capa de entrada $(x_{t})$, que recibe los elementos de la secuencia en el instante de tiempo $t$. Esta se conecta con una o más capas ocultas $(h_{t})$, encargadas de mantener una memoria del estado anterior $(h_{t-1})$ y de actualizarse con cada nuevo dato de entrada. Finalmente, la capa de salida $(y_{t})$ genera la predicción correspondiente al instante $t$
+Desde el punto de vista matemático se describe este proceso mediante:
+
+sean:
+
+* $x_{t}\in R^{n}:$ serie de entrada a la red neuronal(vector).
+
+* $h_{t}\in R^{m}:$ estado oculto en el tiempo t (vector).
+
+* $y_{t} \in R^{k}:$ salida en el tiempo t (vector).
+
+* $W_{xh}\in R^{m\times n}:$ pesos de entrada y capa oculta (matriz).
+
+* $W_{hh}\in R^{m\times m}:$ pesos recurrentes (matriz).
+
+* $W_{hy}\in R^{k\times m}:$ pesos de la capa oculta a la salida.
+
+* $b_{h} \in R^{m}$, $b_{y}\in R^{k}:$ sesgos.
+
+**Memoria**
+
+$$h_{t}=tanh(W_{xh}x_{t}+W_{hh}h_{t-1}+b_{h})$$
+
+**Salida**
+
+$$y_{t}=\phi(W_{hy}h_{t}+b_{y})$$
+
+El proceso de salida en una red neuronal recurrente puede adoptar distintas configuraciones, dependiendo del tipo de tarea a realizar. Las principales formas son:
+
+* Uno a uno (one-to-one): Se ingresa una única entrada y se obtiene una única salida. Es típico en tareas de clasificación estándar.
+
+* Uno a muchos (one-to-many): A partir de una sola entrada, la red genera una secuencia de salidas. Este enfoque se usa, por ejemplo, en la generación de texto o secuencias musicales a partir de una sola señal de inicio.
+
+* Muchos a uno (many-to-one): Se procesan múltiples entradas secuenciales y se produce una única salida. Es común en tareas como análisis de sentimiento, donde se analiza una oración completa y se clasifica su polaridad.
+
+* Muchos a muchos (many-to-many): Se ingresan múltiples elementos secuenciales y se generan múltiples salidas. Esta configuración es frecuente en traducción automática o etiquetado de secuencias, como el reconocimiento de voz o el análisis gramatical de texto.
+
+Las funciones de activación utilizadas en la capa oculta de una red neuronal recurrente suelen ser las mismas que en las redes neuronales clásicas, ya que su objetivo principal es modelar la no linealidad de los datos y controlar el rango de activación de las neuronas ocultas. Entre las más comunes se encuentran la función tanh y ReLU, dependiendo de la arquitectura y la naturaleza del problema.
+
+En cuanto a la capa de salida, la elección de la función de activación depende del tipo de tarea que se desea resolver. Algunos ejemplos típicos incluyen:
+
+Para clasificación binaria, se utiliza la función sigmoide (sigmoid), que transforma la salida en un valor entre 0 y 1, interpretado como una probabilidad.
+
+Para clasificación multiclase, se emplea comúnmente la función softmax, que convierte el vector de salidas en una distribución de probabilidad sobre las posibles clases.
+
+$$softmax(z_{i})=\frac{e^{z_{i}}}{\sum_{j}e^{z_{j}}}$$
+
+y ´para regresión generalmente se deja sin transformación, es decir se deja el producto de la combinación lineal.
+
+### Redes Neuronales de ELMAN
+
+Las Redes Neuronales de Elman son un tipo particular de las Redes Neuronales Recurrentes, ya que usa una capa que se encarga de almacenar el estado oculto anterior y lo usa como un valor de entrada adicional en el nuevo dato, esto permite modelar datos con cierta dependencia de datos anteriores.Su proceso se describe así:
+
+**Actualización de la capa oculta**
+
+$$h_{t}=\phi(W_{xh}x_{t}+W_{ch}c_{t}+b_{h})$$
+
+**Actualización de la capa de salida**
+
+$$y_{t}=\omega(W_{hy}h_{t}+b_{y})$$
+donde $c_{t+1}=h_{t}$.
+
+### Redes Neuronales de Jordan
+
+Las Redes Neuronales de Jordan son una variante de las Redes Neuronales Recurrentes que incorporan retroalimentación desde la capa de salida hacia una capa de contexto. Esta capa de contexto almacena la salida previa y la utiliza como parte de la entrada en el siguiente instante de tiempo, permitiendo que la red tenga en cuenta su propio historial de predicciones al procesar nuevas entradas.
+
+Su funcionamiento consiste en:
+
+**Capa oculta**
+
+
+$$h_{t}=\phi(W_{xh}x_{t}+W_{ch}c_{t}+b_{h})$$
+
+**Capa de salida**
+
+$$y_{t}=\omega(W_{hy}h_{t}+b_{y})$$
+
+donde $c_{t}=y_{t-1}$
+
+### Comparacion Redes de Jordan y Elman
+
+La diferencia entre estos dos métodos radica en el origen de la retroalimentación y el enfoque del modelo. Las redes de Elman se centran en el proceso interno de la red, es decir, actualizan la memoria del estado oculto antes de generar la salida. Esta memoria (o contexto) se utiliza posteriormente para calcular el valor en el siguiente instante de tiempo t.
+
+Por otro lado, las redes de Jordan se enfocan en la salida generada por la red. La salida del modelo se retroalimenta como parte de la entrada para el siguiente paso temporal, lo que permite establecer una correlación directa entre los valores de salida anteriores y los futuros.
+
+En resumen, la principal diferencia es que Elman modela la dinámica interna del estado oculto, mientras que Jordan retroalimenta directamente la salida, lo que refleja un enfoque distinto en la forma en que ambas redes procesan y almacenan información temporal.
+
+### Modelado Redes De ELMAN
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# Instalar si no tienes el paquete RSNNS
+#install.packages("RSNNS")
+library(RSNNS)
+library(forecast)
+
+# --- Preparación de los datos ---
+serie_semanal <- ts(df_semanal$consumo_semanal, start = c(2015, 1), frequency = 52)
+serie_log <- log(serie_semanal)
+
+# Parámetros
+h <- 10  # horizonte de predicción
+n <- length(serie_log)
+serie_train <- serie_log[1:(n - h)]
+serie_test <- serie_log[(n - h + 1):n]
+
+# --- Función para crear ventanas deslizantes para entrenamiento ---
+createLaggedMatrix <- function(series, lag) {
+  X <- embed(series, lag + 1)
+  inputs <- X[, 2:(lag + 1)]
+  targets <- X[, 1]
+  list(inputs = inputs, targets = targets)
+}
+
+# Parámetros para la red
+lag <- 5  # número de retardos (ajustable)
+dataset <- createLaggedMatrix(serie_train, lag)
+inputs <- dataset$inputs
+targets <- dataset$targets
+
+# Normalización
+min_val <- min(serie_train)
+max_val <- max(serie_train)
+inputs_norm <- (inputs - min_val) / (max_val - min_val)
+targets_norm <- (targets - min_val) / (max_val - min_val)
+
+# --- Crear Red Neuronal Elman ---
+set.seed(123)  # para reproducibilidad
+modelo_elman <- elman(
+  inputs_norm, targets_norm,
+  size = c(15),  # Número de neuronas ocultas (puedes ajustar)
+  learnFuncParams = c(0.01),  # tasa de aprendizaje
+  maxit = 500,  # número de iteraciones (ajustable)
+  linOut = TRUE
+)
+
+# --- Pronóstico ---
+# Para pronosticar h pasos hacia adelante, utilizamos el último tramo de la serie
+pred_input <- serie_train[(length(serie_train) - lag + 1):length(serie_train)]
+pred_input_norm <- (pred_input - min_val) / (max_val - min_val)
+
+predicciones_norm <- numeric(h)
+
+for (i in 1:h) {
+  pred <- predict(modelo_elman, matrix(pred_input_norm, nrow = 1))
+  predicciones_norm[i] <- pred
+  # Actualizar input deslizante
+  pred_input_norm <- c(pred_input_norm[-1], pred)
+}
+
+# Desnormalizar
+predicciones <- predicciones_norm * (max_val - min_val) + min_val
+
+# --- Evaluación ---
+comparacion <- data.frame(
+  Real = as.numeric(serie_test),
+  Predicho = predicciones
+)
+
+rmse <- sqrt(mean((comparacion$Real - comparacion$Predicho)^2))
+cat("RMSE:", rmse, "\n")
+
+
+
+```
+
+```{r}
+library(plotly)
+
+# Fecha de inicio real
+fecha_inicio <- as.Date("2017-05-19")
+
+# Generar fechas semanales desde el inicio
+fechas <- seq.Date(from = fecha_inicio, by = "week", length.out = length(serie_log))
+
+# Dataframe para la serie completa
+serie_df <- data.frame(
+  ds = fechas,
+  value = as.numeric(serie_log)
+)
+
+# Fechas correspondientes para test y predicciones
+fechas_test <- fechas[(length(serie_train_ts) + 1):length(fechas)]
+
+test_df <- data.frame(
+  ds = fechas_test,
+  y = as.numeric(serie_test_ts)
+)
+
+pred_df <- data.frame(
+  ds = fechas_test,
+  y = as.numeric(predicciones_ts)
+)
+
+# Crear gráfico interactivo
+fig <- plot_ly()
+
+# Serie logarítmica completa - línea negra
+fig <- fig %>%
+  add_lines(x = serie_df$ds, y = serie_df$value,
+            name = "Serie Logarítmica Completa",
+            line = list(color = "black", width = 2))
+
+# Valores reales test - puntos y líneas rojas
+fig <- fig %>%
+  add_lines(x = test_df$ds, y = test_df$y,
+            name = "Valores Test Reales",
+            line = list(color = "red", width = 2)) %>%
+  add_markers(x = test_df$ds, y = test_df$y,
+              marker = list(color = "red", size = 6))
+
+# Predicción test - puntos y líneas azules
+fig <- fig %>%
+  add_lines(x = pred_df$ds, y = pred_df$y,
+            name = "Predicción Red Elman",
+            line = list(color = "blue", width = 2)) %>%
+  add_markers(x = pred_df$ds, y = pred_df$y,
+              marker = list(color = "blue", size = 6))
+
+# Layout
+fig <- fig %>%
+  layout(title = "Serie Logarítmica, valores test y predicción Red Elman",
+         xaxis = list(title = "Fecha"),
+         yaxis = list(title = "log(Consumo)"),
+         legend = list(x = 0.02, y = 0.98, bgcolor = 'rgba(255,255,255,0.5)'))
+
+fig
+
+
+```
+
+
+### Red de JORDAN
+
+```{r}
+library(RSNNS)
+library(plotly)
+library(dplyr)
+library(lubridate)
+
+# Crear dataset con lags
+createLaggedMatrix <- function(series, lags) {
+  embed(series, lags + 1)
+}
+
+lags <- 5
+data_lagged <- createLaggedMatrix(as.numeric(serie_log), lags)
+
+X <- data_lagged[, 2:(lags + 1)]
+y <- data_lagged[, 1]
+
+n <- nrow(X)
+train_idx <- 1:(n - h)
+test_idx  <- (n - h + 1):n
+
+X_train <- X[train_idx, ]
+y_train <- y[train_idx]
+X_test  <- X[test_idx, ]
+y_test  <- y[test_idx]
+
+# Entrenar Red de Jordan
+set.seed(123)
+modelo_jordan <- jordan(
+  X_train, y_train,
+  size = 15,
+  learnFuncParams = c(0.01),  # Puedes ajustar
+  maxit = 500,
+  linOut = TRUE
+)
+
+# Predicciones
+pred_jordan <- as.numeric(predict(modelo_jordan, X_test))
+
+# Crear DataFrames para Plotly
+fechas <- seq.Date(from = as.Date("2015-01-01"), by = "week", length.out = length(serie_log))
+
+serie_df <- data.frame(ds = fechas, value = as.numeric(serie_log))
+
+test_df <- data.frame(
+  ds = fechas[(length(fechas) - h + 1):length(fechas)],
+  y = as.numeric(y_test)
+)
+
+pred_df <- data.frame(
+  ds = test_df$ds,
+  y = pred_jordan
+)
+
+# Graficar con Plotly
+fig <- plot_ly()
+
+# Serie completa (negro)
+fig <- fig %>%
+  add_lines(x = serie_df$ds, y = serie_df$value,
+            name = "Serie Logarítmica Completa",
+            line = list(color = "black", width = 2))
+
+# Valores reales test (rojo)
+fig <- fig %>%
+  add_lines(x = test_df$ds, y = test_df$y,
+            name = "Valores Test Reales",
+            line = list(color = "red", width = 2)) %>%
+  add_markers(x = test_df$ds, y = test_df$y,
+              marker = list(color = "red", size = 6))
+
+# Predicciones (azul)
+fig <- fig %>%
+  add_lines(x = pred_df$ds, y = pred_df$y,
+            name = "Predicción Jordan",
+            line = list(color = "blue", width = 2)) %>%
+  add_markers(x = pred_df$ds, y = pred_df$y,
+              marker = list(color = "blue", size = 6))
+
+# Layout
+fig <- fig %>%
+  layout(title = "Predicción con Red de Jordan",
+         xaxis = list(title = "Fecha"),
+         yaxis = list(title = "Log Consumo"),
+         legend = list(x = 0.02, y = 0.98))
+
+fig
+
+```
+
+
+Se observa en las redes de ELMAN y JORDAN podemos observar que no se ajusta a los datos, de hecho se observa que el pronostico se realiza en forma lineal en ambos casos, esto puede deberse a que la serie presenta una estacionalidad clara ademas de una tendencia pronunciada, siendo una posible causa de que los pronósticos no sean muy precisos.
+
+# Resutados y Conclusiones.
+
+A continuación, se analiza el desempeño de los distintos modelos empleados en este estudio. Para evaluar la calidad de los pronósticos, se utilizará tanto la representación visual de los resultados como el Error Cuadrático Medio (RMSE), una métrica ampliamente utilizada para medir la precisión de los modelos de predicción.
+
+```{r}
+library(forecast)
+library(prophet)
+library(RSNNS)
+library(plotly)
+library(dplyr)
+
+# -------- DATOS DE ENTRADA --------
+# serie_semanal <- ts(df_semanal$consumo_semanal, start = c(2015, 1), frequency = 52)
+serie_log <- log(serie_semanal)
+
+h <- 10
+n <- length(serie_log)
+fechas <- seq.Date(from = as.Date("2015-01-01"), by = "week", length.out = n)
+
+serie_train <- serie_log[1:(n - h)]
+serie_test  <- serie_log[(n - h + 1):n]
+
+# -------- 1. HOLT-WINTERS --------
+serie_train_ts <- ts(serie_train, start = start(serie_log), frequency = 52)
+modelo_hw <- HoltWinters(serie_train_ts)
+pred_hw <- forecast(modelo_hw, h = h)$mean
+
+# -------- 2. ARIMA --------
+modelo_arima <- auto.arima(serie_train_ts, seasonal = TRUE, stepwise = FALSE, approximation = FALSE)
+pred_arima <- forecast(modelo_arima, h = h)$mean
+
+# -------- 3. PROPHET --------
+datos_prophet <- data.frame(ds = fechas, y = as.numeric(serie_log))
+train_prophet <- datos_prophet[1:(n - h), ]
+modelo_prophet <- prophet(train_prophet,
+                         seasonality.mode = "multiplicative",
+                         weekly.seasonality = TRUE,
+                         daily.seasonality = FALSE,
+                         yearly.seasonality = FALSE)
+
+future_prophet <- make_future_dataframe(modelo_prophet, periods = h, freq = "week")
+pred_prophet_full <- predict(modelo_prophet, future_prophet)
+pred_prophet <- tail(pred_prophet_full$yhat, h)
+
+# -------- 4. RED NEURONAL ELMAN --------
+createLaggedMatrix <- function(series, lag) {
+  X <- embed(series, lag + 1)
+  inputs <- X[, 2:(lag + 1)]
+  targets <- X[, 1]
+  list(inputs = inputs, targets = targets)
+}
+
+lag <- 5
+dataset <- createLaggedMatrix(serie_train, lag)
+inputs <- dataset$inputs
+targets <- dataset$targets
+
+min_val <- min(serie_train)
+max_val <- max(serie_train)
+inputs_norm <- (inputs - min_val) / (max_val - min_val)
+targets_norm <- (targets - min_val) / (max_val - min_val)
+
+set.seed(123)
+modelo_elman <- elman(inputs_norm, targets_norm, size = c(15), learnFuncParams = c(0.01), maxit = 500, linOut = TRUE)
+
+# Pronóstico recursivo
+pred_input_norm <- (serie_train[(length(serie_train) - lag + 1):length(serie_train)] - min_val) / (max_val - min_val)
+pred_elman_norm <- numeric(h)
+
+for (i in 1:h) {
+  pred <- predict(modelo_elman, matrix(pred_input_norm, nrow = 1))
+  pred_elman_norm[i] <- pred
+  pred_input_norm <- c(pred_input_norm[-1], pred)
+}
+pred_elman <- pred_elman_norm * (max_val - min_val) + min_val
+
+# -------- 5. RED NEURONAL JORDAN --------
+lags <- 5
+data_lagged <- embed(as.numeric(serie_log), lags + 1)
+X <- data_lagged[, 2:(lags + 1)]
+y <- data_lagged[, 1]
+n_lag <- nrow(X)
+train_idx <- 1:(n_lag - h)
+test_idx <- (n_lag - h + 1):n_lag
+
+X_train <- X[train_idx, ]
+y_train <- y[train_idx]
+X_test <- X[test_idx, ]
+y_test <- y[test_idx]
+
+set.seed(123)
+modelo_jordan <- jordan(X_train, y_train, size = 15, learnFuncParams = c(0.01), maxit = 500, linOut = TRUE)
+pred_jordan <- as.numeric(predict(modelo_jordan, X_test))
+
+# -------- GRAFICAR TODAS LAS PREDICCIONES --------
+fechas_test <- fechas[(length(fechas) - h + 1):length(fechas)]
+
+fig <- plot_ly()
+
+# Serie completa
+fig <- fig %>%
+  add_lines(x = fechas, y = serie_log, name = "Serie Logarítmica Completa", line = list(color = "black", width = 2))
+
+# Valores reales test
+fig <- fig %>%
+  add_lines(x = fechas_test, y = serie_test, name = "Valores Reales (Test)", line = list(color = "red", width = 2)) %>%
+  add_markers(x = fechas_test, y = serie_test, marker = list(color = "red", size = 6))
+
+# Predicciones de cada modelo
+fig <- fig %>%
+  add_lines(x = fechas_test, y = pred_hw, name = "Holt-Winters", line = list(color = "blue", dash = "dot")) %>%
+  add_lines(x = fechas_test, y = pred_arima, name = "ARIMA", line = list(color = "green", dash = "dash")) %>%
+  add_lines(x = fechas_test, y = pred_prophet, name = "Prophet", line = list(color = "purple", dash = "dashdot")) %>%
+  add_lines(x = fechas_test, y = pred_elman, name = "Elman", line = list(color = "orange")) %>%
+  add_lines(x = fechas_test, y = pred_jordan, name = "Jordan", line = list(color = "brown"))
+
+fig <- fig %>%
+  layout(title = "Comparación de Modelos de Predicción (Log)",
+         xaxis = list(title = "Fecha"),
+         yaxis = list(title = "Log Consumo"),
+         legend = list(x = 0.01, y = 0.99))
+
+fig
+
+
+```
+
+### RMSE
+
+```{r}
+# --- Cálculo de RMSE para cada modelo ---
+rmse_hw     <- sqrt(mean((serie_test - pred_hw)^2))
+rmse_arima  <- sqrt(mean((serie_test - pred_arima)^2))
+rmse_prophet<- sqrt(mean((serie_test - pred_prophet)^2))
+rmse_elman  <- sqrt(mean((serie_test - pred_elman)^2))
+rmse_jordan <- sqrt(mean((serie_test - pred_jordan)^2))
+
+# Crear tabla de comparación
+tabla_rmse <- data.frame(
+  Modelo = c("Holt-Winters", "ARIMA", "Prophet", "Red Neuronal Elman", "Red Neuronal Jordan"),
+  RMSE = c(rmse_hw, rmse_arima, rmse_prophet, rmse_elman, rmse_jordan)
+)
+
+print(tabla_rmse)
+
+```
+
+# Conclusiones
+
+A partir de los resultados obtenidos, se puede concluir que, si bien la Red Neuronal de Elman presentó el mejor desempeño cuantitativo según la métrica RMSE, este valor no necesariamente se traduce en un mejor ajuste visual al comportamiento real de la serie. Al observar las predicciones generadas por este modelo, es evidente que, a pesar de su buen rendimiento numérico, no logra capturar adecuadamente las fluctuaciones y patrones del consumo semanal.
+
+Por otro lado, los modelos ARIMA, Prophet y Red Neuronal de Jordan mostraron resultados bastante similares en cuanto al RMSE y ofrecieron una representación visual más acorde al comportamiento de la serie. Esto sugiere que, aunque sus métricas no fueron las más bajas, pueden ser más adecuados si el objetivo es preservar la estructura y dinámica del consumo a lo largo del tiempo.
+
+En contraste, el modelo de Holt-Winters, aunque sencillo y diseñado para capturar estacionalidad y tendencia, evidenció un mayor error y una menor capacidad para seguir el patrón observado en los datos reales. Esto indica que los supuestos de estacionalidad o tendencia lineal propios de este modelo no fueron suficientes para representar adecuadamente la serie en este caso.
+
+Por lo tanto, si bien el RMSE es una métrica útil, es importante complementarla con un análisis visual y otras métricas para seleccionar el modelo más adecuado. Futuras evaluaciones podrían incluir indicadores como MAPE o MAE para tener una visión más completa del desempeño de los modelos.
+
+
+```{r}
+library(Metrics)
+
+# Función para calcular métricas
+calcular_metricas <- function(real, predicho) {
+  rmse_val <- rmse(real, predicho)
+  mae_val <- mae(real, predicho)
+  mape_val <- mape(real, predicho) * 100
+  return(c(RMSE = rmse_val, MAE = mae_val, MAPE = mape_val))
+}
+
+# Calcular métricas para cada modelo
+metricas_hw <- calcular_metricas(serie_test, pred_hw)
+metricas_arima <- calcular_metricas(serie_test, pred_arima)
+metricas_prophet <- calcular_metricas(serie_test, pred_prophet)
+metricas_elman <- calcular_metricas(serie_test, predicciones)     # Red Elman
+metricas_jordan <- calcular_metricas(serie_test, pred_jordan)     # Red Jordan
+
+# Crear tabla resumen
+tabla_metricas <- data.frame(
+  Modelo = c("Holt-Winters", "ARIMA", "Prophet", "Elman", "Jordan"),
+  RMSE = c(metricas_hw["RMSE"], metricas_arima["RMSE"], metricas_prophet["RMSE"], 
+           metricas_elman["RMSE"], metricas_jordan["RMSE"]),
+  MAE = c(metricas_hw["MAE"], metricas_arima["MAE"], metricas_prophet["MAE"], 
+          metricas_elman["MAE"], metricas_jordan["MAE"]),
+  MAPE = c(metricas_hw["MAPE"], metricas_arima["MAPE"], metricas_prophet["MAPE"], 
+           metricas_elman["MAPE"], metricas_jordan["MAPE"])
+)
+
+print(tabla_metricas)
+
+```
+Los resultados obtenidos a partir de las métricas de evaluación muestran que la Red Neuronal de Elman fue el modelo con mejor desempeño global, presentando el menor RMSE (0.6714), MAE (0.2638) y MAPE (4.08%), lo que indica un mejor ajuste en términos de error absoluto y relativo. Le siguieron de cerca los modelos ARIMA y Red Neuronal de Jordan, con diferencias mínimas respecto al modelo de Elman.
+
+Sin embargo, es importante destacar que, a pesar de los buenos resultados numéricos, el comportamiento visual de las predicciones evidenció ciertas limitaciones en la capacidad de algunos modelos para capturar fielmente la dinámica real de la serie temporal, especialmente en lo que respecta a fluctuaciones puntuales.
+
+En contraste, el modelo Holt-Winters presentó el peor desempeño en todas las métricas evaluadas, lo que sugiere que sus supuestos de tendencia y estacionalidad no fueron suficientes para describir adecuadamente el comportamiento del consumo analizado.
+
+En síntesis, Elman se posiciona como el mejor modelo desde el punto de vista cuantitativo, pero la selección definitiva del modelo ideal dependerá del balance entre precisión numérica y fidelidad visual respecto a la serie real. Para futuras investigaciones se recomienda complementar este análisis con otras métricas y validaciones, así como explorar ajustes adicionales en los hiperparámetros de las redes neuronales.

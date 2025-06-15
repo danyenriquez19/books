@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 7 Redes Neuronales Recurrentes | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</title>
+  <meta name="description" content="Capítulo 7 Redes Neuronales Recurrentes | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta name="generator" content="bookdown 0.42 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 7 Redes Neuronales Recurrentes | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 7 Redes Neuronales Recurrentes | PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES" />
+  
+  
+  
+
+<meta name="author" content="Dany Enriquez" />
+
+
+<meta name="date" content="2025-06-14" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"/>
+<link rel="next" href="resutados-y-conclusiones..html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Series de Tiempo</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Importancia del Análisis del Consumo de Agua</a></li>
+<li class="chapter" data-level="2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html"><i class="fa fa-check"></i><b>2</b> Analisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#selección-de-usuario"><i class="fa fa-check"></i><b>2.1</b> Selección de Usuario</a></li>
+<li class="chapter" data-level="2.2" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rango-de-las-mediciones"><i class="fa fa-check"></i><b>2.2</b> Rango de las Mediciones</a></li>
+<li class="chapter" data-level="2.3" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-faltantes"><i class="fa fa-check"></i><b>2.3</b> Valores Faltantes</a></li>
+<li class="chapter" data-level="2.4" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#formato-de-las-variables"><i class="fa fa-check"></i><b>2.4</b> Formato de las variables</a></li>
+<li class="chapter" data-level="2.5" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estadisticas-descriptivas"><i class="fa fa-check"></i><b>2.5</b> Estadisticas Descriptivas</a></li>
+<li class="chapter" data-level="2.6" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#valores-negativos"><i class="fa fa-check"></i><b>2.6</b> Valores Negativos</a></li>
+<li class="chapter" data-level="2.7" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#imputar-valores-negativos"><i class="fa fa-check"></i><b>2.7</b> Imputar Valores Negativos</a></li>
+<li class="chapter" data-level="2.8" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resumen-analisis-estadistico"><i class="fa fa-check"></i><b>2.8</b> Resumen Analisis Estadistico</a></li>
+<li class="chapter" data-level="2.9" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#analisis-grafico"><i class="fa fa-check"></i><b>2.9</b> Analisis Grafico</a></li>
+<li class="chapter" data-level="2.10" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#serie-de-tiempo"><i class="fa fa-check"></i><b>2.10</b> Serie de Tiempo</a></li>
+<li class="chapter" data-level="2.11" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#resultados-analisis-grafico"><i class="fa fa-check"></i><b>2.11</b> Resultados Analisis Grafico</a></li>
+<li class="chapter" data-level="2.12" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#medias-moviles"><i class="fa fa-check"></i><b>2.12</b> Medias Moviles</a></li>
+<li class="chapter" data-level="2.13" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#rezagos"><i class="fa fa-check"></i><b>2.13</b> Rezagos</a></li>
+<li class="chapter" data-level="2.14" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#estacionalidad"><i class="fa fa-check"></i><b>2.14</b> Estacionalidad</a></li>
+<li class="chapter" data-level="2.15" data-path="analisis-exploratorio-de-datos.html"><a href="analisis-exploratorio-de-datos.html#autocorrelaciones"><i class="fa fa-check"></i><b>2.15</b> Autocorrelaciones</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html"><i class="fa fa-check"></i><b>3</b> Prepocesamiento de Datos</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html#descomposicion-de-la-serie"><i class="fa fa-check"></i><b>3.1</b> Descomposicion de la Serie</a></li>
+<li class="chapter" data-level="3.2" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html#estacionariedad"><i class="fa fa-check"></i><b>3.2</b> Estacionariedad</a></li>
+<li class="chapter" data-level="3.3" data-path="prepocesamiento-de-datos.html"><a href="prepocesamiento-de-datos.html#resultados-de-la-descomposicion-y-estacionariedad"><i class="fa fa-check"></i><b>3.3</b> Resultados de la Descomposicion y Estacionariedad</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="pronosticos.html"><a href="pronosticos.html"><i class="fa fa-check"></i><b>4</b> Pronosticos</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="pronosticos.html"><a href="pronosticos.html#metodólogia-holter-winter"><i class="fa fa-check"></i><b>4.1</b> Metodólogia Holter Winter</a></li>
+<li class="chapter" data-level="4.2" data-path="pronosticos.html"><a href="pronosticos.html#analisis-de-los-residuos"><i class="fa fa-check"></i><b>4.2</b> Analisis de los Residuos</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html"><i class="fa fa-check"></i><b>5</b> Metodología Box-Jenkins y Modelos ARIMA</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelo-arima"><i class="fa fa-check"></i><b>5.1</b> Modelo ARIMA</a></li>
+<li class="chapter" data-level="5.2" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#metodología-box-jenkins"><i class="fa fa-check"></i><b>5.2</b> Metodología Box-Jenkins</a></li>
+<li class="chapter" data-level="5.3" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#modelado"><i class="fa fa-check"></i><b>5.3</b> Modelado</a></li>
+<li class="chapter" data-level="5.4" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#validacion-de-supuestos-sobre-los-residuos"><i class="fa fa-check"></i><b>5.4</b> Validacion de Supuestos sobre los Residuos</a></li>
+<li class="chapter" data-level="5.5" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#pronosticos-1"><i class="fa fa-check"></i><b>5.5</b> Pronosticos</a></li>
+<li class="chapter" data-level="5.6" data-path="metodología-box-jenkins-y-modelos-arima.html"><a href="metodología-box-jenkins-y-modelos-arima.html#gráfico-de-pronosticos"><i class="fa fa-check"></i><b>5.6</b> Gráfico de Pronosticos</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><i class="fa fa-check"></i><b>6</b> Regresion de una Serie y Algoritmo Facebook´s Prophet</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#regresión-de-una-serie"><i class="fa fa-check"></i><b>6.1</b> Regresión de una serie</a></li>
+<li class="chapter" data-level="6.2" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#algoritmo-facebooks-prophet"><i class="fa fa-check"></i><b>6.2</b> Algoritmo Facebook´s Prophet</a></li>
+<li class="chapter" data-level="6.3" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#modelado-1"><i class="fa fa-check"></i><b>6.3</b> Modelado</a></li>
+<li class="chapter" data-level="6.4" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#verificación-de-los-residuos"><i class="fa fa-check"></i><b>6.4</b> Verificación de los residuos</a></li>
+<li class="chapter" data-level="6.5" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#conclusion"><i class="fa fa-check"></i><b>6.5</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html"><i class="fa fa-check"></i><b>7</b> Redes Neuronales Recurrentes</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-ann"><i class="fa fa-check"></i><b>7.1</b> Redes Neuronales (ANN)</a></li>
+<li class="chapter" data-level="7.2" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-recurrentes-rnn"><i class="fa fa-check"></i><b>7.2</b> Redes Neuronales Recurrentes (RNN)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-de-elman"><i class="fa fa-check"></i><b>7.2.1</b> Redes Neuronales de ELMAN</a></li>
+<li class="chapter" data-level="7.2.2" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-de-jordan"><i class="fa fa-check"></i><b>7.2.2</b> Redes Neuronales de Jordan</a></li>
+<li class="chapter" data-level="7.2.3" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#comparacion-redes-de-jordan-y-elman"><i class="fa fa-check"></i><b>7.2.3</b> Comparacion Redes de Jordan y Elman</a></li>
+<li class="chapter" data-level="7.2.4" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#modelado-redes-de-elman"><i class="fa fa-check"></i><b>7.2.4</b> Modelado Redes De ELMAN</a></li>
+<li class="chapter" data-level="7.2.5" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#red-de-jordan"><i class="fa fa-check"></i><b>7.2.5</b> Red de JORDAN</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="resutados-y-conclusiones..html"><a href="resutados-y-conclusiones..html"><i class="fa fa-check"></i><b>8</b> Resutados y Conclusiones.</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="resutados-y-conclusiones..html"><a href="resutados-y-conclusiones..html#rmse"><i class="fa fa-check"></i><b>8.0.1</b> RMSE</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>9</b> Conclusiones</a></li>
+<li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">PREDICCIÓN DEL CONSUMO DE AGUA UTILIZANDO SERIES DE TIEMPO GENERADAS POR MEDIDORES INTELIGENTES</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="redes-neuronales-recurrentes" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Capítulo 7</span> Redes Neuronales Recurrentes<a href="redes-neuronales-recurrentes.html#redes-neuronales-recurrentes" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="redes-neuronales-ann" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Redes Neuronales (ANN)<a href="redes-neuronales-recurrentes.html#redes-neuronales-ann" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una red neuronal artificial es un modelo computacional inspirado en el funcionamiento del cerebro humano. Este modelo conecta neuronas artificiales a través de capas, y es capaz de generar respuestas basadas en el aprendizaje obtenido a partir de los datos utilizados durante el entrenamiento.</p>
+<p>Su estructura fundamental se compone de tres tipos de capas:</p>
+<p>Una capa de entrada (input layer), que recibe los datos de entrada.</p>
+<p>Una o más capas ocultas (hidden layers), responsables de procesar la información y aprender patrones complejos.</p>
+<p>Una capa de salida (output layer), que entrega el resultado final de la red.</p>
+<p>Las neuronas están interconectadas mediante pesos (weights), donde cada peso representa la influencia que una entrada tiene sobre la salida. Además, cada neurona incorpora un sesgo (bias), que permite ajustar la salida de la neurona incluso en ausencia de entrada, brindando mayor flexibilidad al modelo<span class="citation">(<a href="#ref-Hilera2000">González and Hernando 2000</a>)</span>.</p>
+<p>Desde el punto de vista matemático las neuronas funcionan mediante las siguientes operaciones:</p>
+<p>sean:</p>
+<ul>
+<li><p><span class="math inline">\(x_{i}:\)</span> la entrada i-esima a la red neuronal.</p></li>
+<li><p><span class="math inline">\(w_{i}:\)</span> el peso asociado a la i-esima entrada.</p></li>
+<li><p><span class="math inline">\(b_{i}:\)</span> sesgo() parámetro adicional que permite desplazar la función de activación, para dotar de flexibilidad al modelo para obtener un mejor ajuste a los datos)</p></li>
+<li><p><span class="math inline">\(z:\)</span> combinación lineal de las entradas con los pesos, sumado con el sesgo</p></li>
+</ul>
+<p><span class="math display">\[z=\sum_{i=1}^{n}w_{i}x_{i}+b\]</span></p>
+<p>Posteriormente, se aplica una función de activación <span class="math inline">\(\phi(z)\)</span>, que introduce no linealidad en el modelo, permitiendo así representar relaciones más complejas. La salida de la neurona <span class="math inline">\(a\)</span> se obtiene como:</p>
+<p><span class="math display">\[a=\phi(z)\]</span></p>
+<p>Cabe destacar que la función de activación cumple el propósito de activar una neurona cuando la combinación lineal de sus entradas alcanza cierto valor. Esta función introduce no linealidad en el modelo, lo que permite que la red neuronal pueda aprender relaciones complejas entre los datos. A medida que las neuronas se activan, se propaga la información a través de las diferentes capas de la red.</p>
+<p>Existen diversas funciones de activación, cada una con características específicas y aplicaciones particulares. Entre las más utilizadas se encuentran:</p>
+<p><strong>Función Sigmoide</strong></p>
+<p><span class="math display">\[\phi(z)=\frac{1}{1+e^{-z}}\]</span></p>
+<p>esta función tiene dominio <span class="math inline">\((-\infty,\infty)\)</span>, su rango esta en (0,1), muy usado para modelos que implican clasificación binaria.</p>
+<p><strong>Función Tangente hiperbólica</strong></p>
+<p><span class="math display">\[\phi(z)=\frac{e^{z}-e^{-z}}{e^{z}+e^{-z}}\]</span></p>
+<p>esta función tiene dominio <span class="math inline">\((-\infty,\infty)\)</span> y rango <span class="math inline">\((-1,1)\)</span>, muy usada debido a que se encuentra centrada en 0, facilitando el aprendizaje de algunas redes.</p>
+<p><strong>ReLU (Rectified Linear Unit)</strong></p>
+<p><span class="math display">\[\phi(z)=max(0,z)\]</span></p>
+<p>esta función tiene dominio <span class="math inline">\((-\infty,\infty)\)</span> y rango <span class="math inline">\([0,\infty)\)</span>, es muy usada ya que permite que de manera eficiente la convergencia del entrenamiento, sin embargo es muy propensa a crear neuronas con salidas cero cuando z es negativo.</p>
+</div>
+<div id="redes-neuronales-recurrentes-rnn" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Redes Neuronales Recurrentes (RNN)<a href="redes-neuronales-recurrentes.html#redes-neuronales-recurrentes-rnn" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Una red neuronal recurrente (RNN) es un tipo de red neuronal diseñada específicamente para el procesamiento de secuencias o datos temporales. A diferencia de las redes neuronales tradicionales, las RNN incorporan un mecanismo de memoria que les permite conservar información sobre eventos anteriores. Esta capacidad las hace especialmente útiles para tareas donde el contexto previo influye en la predicción, como la anticipación de eventos futuros a partir de patrones pasados.</p>
+<p>Su funcionamiento se basa en una capa de entrada <span class="math inline">\((x_{t})\)</span>, que recibe los elementos de la secuencia en el instante de tiempo <span class="math inline">\(t\)</span>. Esta se conecta con una o más capas ocultas <span class="math inline">\((h_{t})\)</span>, encargadas de mantener una memoria del estado anterior <span class="math inline">\((h_{t-1})\)</span> y de actualizarse con cada nuevo dato de entrada. Finalmente, la capa de salida <span class="math inline">\((y_{t})\)</span> genera la predicción correspondiente al instante <span class="math inline">\(t\)</span>
+Desde el punto de vista matemático se describe este proceso mediante:</p>
+<p>sean:</p>
+<ul>
+<li><p><span class="math inline">\(x_{t}\in R^{n}:\)</span> serie de entrada a la red neuronal(vector).</p></li>
+<li><p><span class="math inline">\(h_{t}\in R^{m}:\)</span> estado oculto en el tiempo t (vector).</p></li>
+<li><p><span class="math inline">\(y_{t} \in R^{k}:\)</span> salida en el tiempo t (vector).</p></li>
+<li><p><span class="math inline">\(W_{xh}\in R^{m\times n}:\)</span> pesos de entrada y capa oculta (matriz).</p></li>
+<li><p><span class="math inline">\(W_{hh}\in R^{m\times m}:\)</span> pesos recurrentes (matriz).</p></li>
+<li><p><span class="math inline">\(W_{hy}\in R^{k\times m}:\)</span> pesos de la capa oculta a la salida.</p></li>
+<li><p><span class="math inline">\(b_{h} \in R^{m}\)</span>, <span class="math inline">\(b_{y}\in R^{k}:\)</span> sesgos.</p></li>
+</ul>
+<p><strong>Memoria</strong></p>
+<p><span class="math display">\[h_{t}=tanh(W_{xh}x_{t}+W_{hh}h_{t-1}+b_{h})\]</span></p>
+<p><strong>Salida</strong></p>
+<p><span class="math display">\[y_{t}=\phi(W_{hy}h_{t}+b_{y})\]</span></p>
+<p>El proceso de salida en una red neuronal recurrente puede adoptar distintas configuraciones, dependiendo del tipo de tarea a realizar. Las principales formas son:</p>
+<ul>
+<li><p>Uno a uno (one-to-one): Se ingresa una única entrada y se obtiene una única salida. Es típico en tareas de clasificación estándar.</p></li>
+<li><p>Uno a muchos (one-to-many): A partir de una sola entrada, la red genera una secuencia de salidas. Este enfoque se usa, por ejemplo, en la generación de texto o secuencias musicales a partir de una sola señal de inicio.</p></li>
+<li><p>Muchos a uno (many-to-one): Se procesan múltiples entradas secuenciales y se produce una única salida. Es común en tareas como análisis de sentimiento, donde se analiza una oración completa y se clasifica su polaridad.</p></li>
+<li><p>Muchos a muchos (many-to-many): Se ingresan múltiples elementos secuenciales y se generan múltiples salidas. Esta configuración es frecuente en traducción automática o etiquetado de secuencias, como el reconocimiento de voz o el análisis gramatical de texto.</p></li>
+</ul>
+<p>Las funciones de activación utilizadas en la capa oculta de una red neuronal recurrente suelen ser las mismas que en las redes neuronales clásicas, ya que su objetivo principal es modelar la no linealidad de los datos y controlar el rango de activación de las neuronas ocultas. Entre las más comunes se encuentran la función tanh y ReLU, dependiendo de la arquitectura y la naturaleza del problema.</p>
+<p>En cuanto a la capa de salida, la elección de la función de activación depende del tipo de tarea que se desea resolver. Algunos ejemplos típicos incluyen:</p>
+<p>Para clasificación binaria, se utiliza la función sigmoide (sigmoid), que transforma la salida en un valor entre 0 y 1, interpretado como una probabilidad.</p>
+<p>Para clasificación multiclase, se emplea comúnmente la función softmax, que convierte el vector de salidas en una distribución de probabilidad sobre las posibles clases.</p>
+<p><span class="math display">\[softmax(z_{i})=\frac{e^{z_{i}}}{\sum_{j}e^{z_{j}}}\]</span></p>
+<p>y ´para regresión generalmente se deja sin transformación, es decir se deja el producto de la combinación lineal.</p>
+<div id="redes-neuronales-de-elman" class="section level3 hasAnchor" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Redes Neuronales de ELMAN<a href="redes-neuronales-recurrentes.html#redes-neuronales-de-elman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las Redes Neuronales de Elman son un tipo particular de las Redes Neuronales Recurrentes, ya que usa una capa que se encarga de almacenar el estado oculto anterior y lo usa como un valor de entrada adicional en el nuevo dato, esto permite modelar datos con cierta dependencia de datos anteriores.Su proceso se describe así:</p>
+<p><strong>Actualización de la capa oculta</strong></p>
+<p><span class="math display">\[h_{t}=\phi(W_{xh}x_{t}+W_{ch}c_{t}+b_{h})\]</span></p>
+<p><strong>Actualización de la capa de salida</strong></p>
+<p><span class="math display">\[y_{t}=\omega(W_{hy}h_{t}+b_{y})\]</span>
+donde <span class="math inline">\(c_{t+1}=h_{t}\)</span>.</p>
+</div>
+<div id="redes-neuronales-de-jordan" class="section level3 hasAnchor" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Redes Neuronales de Jordan<a href="redes-neuronales-recurrentes.html#redes-neuronales-de-jordan" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Las Redes Neuronales de Jordan son una variante de las Redes Neuronales Recurrentes que incorporan retroalimentación desde la capa de salida hacia una capa de contexto. Esta capa de contexto almacena la salida previa y la utiliza como parte de la entrada en el siguiente instante de tiempo, permitiendo que la red tenga en cuenta su propio historial de predicciones al procesar nuevas entradas.</p>
+<p>Su funcionamiento consiste en:</p>
+<p><strong>Capa oculta</strong></p>
+<p><span class="math display">\[h_{t}=\phi(W_{xh}x_{t}+W_{ch}c_{t}+b_{h})\]</span></p>
+<p><strong>Capa de salida</strong></p>
+<p><span class="math display">\[y_{t}=\omega(W_{hy}h_{t}+b_{y})\]</span></p>
+<p>donde <span class="math inline">\(c_{t}=y_{t-1}\)</span></p>
+</div>
+<div id="comparacion-redes-de-jordan-y-elman" class="section level3 hasAnchor" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Comparacion Redes de Jordan y Elman<a href="redes-neuronales-recurrentes.html#comparacion-redes-de-jordan-y-elman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>La diferencia entre estos dos métodos radica en el origen de la retroalimentación y el enfoque del modelo. Las redes de Elman se centran en el proceso interno de la red, es decir, actualizan la memoria del estado oculto antes de generar la salida. Esta memoria (o contexto) se utiliza posteriormente para calcular el valor en el siguiente instante de tiempo t.</p>
+<p>Por otro lado, las redes de Jordan se enfocan en la salida generada por la red. La salida del modelo se retroalimenta como parte de la entrada para el siguiente paso temporal, lo que permite establecer una correlación directa entre los valores de salida anteriores y los futuros.</p>
+<p>En resumen, la principal diferencia es que Elman modela la dinámica interna del estado oculto, mientras que Jordan retroalimenta directamente la salida, lo que refleja un enfoque distinto en la forma en que ambas redes procesan y almacenan información temporal.</p>
+</div>
+<div id="modelado-redes-de-elman" class="section level3 hasAnchor" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> Modelado Redes De ELMAN<a href="redes-neuronales-recurrentes.html#modelado-redes-de-elman" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre><code>## RMSE: 0.6714161</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="redes-neuronales-recurrentes.html#cb27-1" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb27-2"><a href="redes-neuronales-recurrentes.html#cb27-2" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="redes-neuronales-recurrentes.html#cb27-3" tabindex="-1"></a><span class="co"># Fecha de inicio real</span></span>
+<span id="cb27-4"><a href="redes-neuronales-recurrentes.html#cb27-4" tabindex="-1"></a>fecha_inicio <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">&quot;2017-05-19&quot;</span>)</span>
+<span id="cb27-5"><a href="redes-neuronales-recurrentes.html#cb27-5" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="redes-neuronales-recurrentes.html#cb27-6" tabindex="-1"></a><span class="co"># Generar fechas semanales desde el inicio</span></span>
+<span id="cb27-7"><a href="redes-neuronales-recurrentes.html#cb27-7" tabindex="-1"></a>fechas <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(<span class="at">from =</span> fecha_inicio, <span class="at">by =</span> <span class="st">&quot;week&quot;</span>, <span class="at">length.out =</span> <span class="fu">length</span>(serie_log))</span>
+<span id="cb27-8"><a href="redes-neuronales-recurrentes.html#cb27-8" tabindex="-1"></a></span>
+<span id="cb27-9"><a href="redes-neuronales-recurrentes.html#cb27-9" tabindex="-1"></a><span class="co"># Dataframe para la serie completa</span></span>
+<span id="cb27-10"><a href="redes-neuronales-recurrentes.html#cb27-10" tabindex="-1"></a>serie_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb27-11"><a href="redes-neuronales-recurrentes.html#cb27-11" tabindex="-1"></a>  <span class="at">ds =</span> fechas,</span>
+<span id="cb27-12"><a href="redes-neuronales-recurrentes.html#cb27-12" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">as.numeric</span>(serie_log)</span>
+<span id="cb27-13"><a href="redes-neuronales-recurrentes.html#cb27-13" tabindex="-1"></a>)</span>
+<span id="cb27-14"><a href="redes-neuronales-recurrentes.html#cb27-14" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="redes-neuronales-recurrentes.html#cb27-15" tabindex="-1"></a><span class="co"># Fechas correspondientes para test y predicciones</span></span>
+<span id="cb27-16"><a href="redes-neuronales-recurrentes.html#cb27-16" tabindex="-1"></a>fechas_test <span class="ot">&lt;-</span> fechas[(<span class="fu">length</span>(serie_train_ts) <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(fechas)]</span>
+<span id="cb27-17"><a href="redes-neuronales-recurrentes.html#cb27-17" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="redes-neuronales-recurrentes.html#cb27-18" tabindex="-1"></a>test_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb27-19"><a href="redes-neuronales-recurrentes.html#cb27-19" tabindex="-1"></a>  <span class="at">ds =</span> fechas_test,</span>
+<span id="cb27-20"><a href="redes-neuronales-recurrentes.html#cb27-20" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">as.numeric</span>(serie_test_ts)</span>
+<span id="cb27-21"><a href="redes-neuronales-recurrentes.html#cb27-21" tabindex="-1"></a>)</span>
+<span id="cb27-22"><a href="redes-neuronales-recurrentes.html#cb27-22" tabindex="-1"></a></span>
+<span id="cb27-23"><a href="redes-neuronales-recurrentes.html#cb27-23" tabindex="-1"></a>pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb27-24"><a href="redes-neuronales-recurrentes.html#cb27-24" tabindex="-1"></a>  <span class="at">ds =</span> fechas_test,</span>
+<span id="cb27-25"><a href="redes-neuronales-recurrentes.html#cb27-25" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">as.numeric</span>(predicciones_ts)</span>
+<span id="cb27-26"><a href="redes-neuronales-recurrentes.html#cb27-26" tabindex="-1"></a>)</span>
+<span id="cb27-27"><a href="redes-neuronales-recurrentes.html#cb27-27" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="redes-neuronales-recurrentes.html#cb27-28" tabindex="-1"></a><span class="co"># Crear gráfico interactivo</span></span>
+<span id="cb27-29"><a href="redes-neuronales-recurrentes.html#cb27-29" tabindex="-1"></a>fig <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>()</span>
+<span id="cb27-30"><a href="redes-neuronales-recurrentes.html#cb27-30" tabindex="-1"></a></span>
+<span id="cb27-31"><a href="redes-neuronales-recurrentes.html#cb27-31" tabindex="-1"></a><span class="co"># Serie logarítmica completa - línea negra</span></span>
+<span id="cb27-32"><a href="redes-neuronales-recurrentes.html#cb27-32" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb27-33"><a href="redes-neuronales-recurrentes.html#cb27-33" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> serie_df<span class="sc">$</span>ds, <span class="at">y =</span> serie_df<span class="sc">$</span>value,</span>
+<span id="cb27-34"><a href="redes-neuronales-recurrentes.html#cb27-34" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Serie Logarítmica Completa&quot;</span>,</span>
+<span id="cb27-35"><a href="redes-neuronales-recurrentes.html#cb27-35" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>))</span>
+<span id="cb27-36"><a href="redes-neuronales-recurrentes.html#cb27-36" tabindex="-1"></a></span>
+<span id="cb27-37"><a href="redes-neuronales-recurrentes.html#cb27-37" tabindex="-1"></a><span class="co"># Valores reales test - puntos y líneas rojas</span></span>
+<span id="cb27-38"><a href="redes-neuronales-recurrentes.html#cb27-38" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb27-39"><a href="redes-neuronales-recurrentes.html#cb27-39" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> test_df<span class="sc">$</span>ds, <span class="at">y =</span> test_df<span class="sc">$</span>y,</span>
+<span id="cb27-40"><a href="redes-neuronales-recurrentes.html#cb27-40" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Valores Test Reales&quot;</span>,</span>
+<span id="cb27-41"><a href="redes-neuronales-recurrentes.html#cb27-41" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-42"><a href="redes-neuronales-recurrentes.html#cb27-42" tabindex="-1"></a>  <span class="fu">add_markers</span>(<span class="at">x =</span> test_df<span class="sc">$</span>ds, <span class="at">y =</span> test_df<span class="sc">$</span>y,</span>
+<span id="cb27-43"><a href="redes-neuronales-recurrentes.html#cb27-43" tabindex="-1"></a>              <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>))</span>
+<span id="cb27-44"><a href="redes-neuronales-recurrentes.html#cb27-44" tabindex="-1"></a></span>
+<span id="cb27-45"><a href="redes-neuronales-recurrentes.html#cb27-45" tabindex="-1"></a><span class="co"># Predicción test - puntos y líneas azules</span></span>
+<span id="cb27-46"><a href="redes-neuronales-recurrentes.html#cb27-46" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb27-47"><a href="redes-neuronales-recurrentes.html#cb27-47" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> pred_df<span class="sc">$</span>ds, <span class="at">y =</span> pred_df<span class="sc">$</span>y,</span>
+<span id="cb27-48"><a href="redes-neuronales-recurrentes.html#cb27-48" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Predicción Red Elman&quot;</span>,</span>
+<span id="cb27-49"><a href="redes-neuronales-recurrentes.html#cb27-49" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-50"><a href="redes-neuronales-recurrentes.html#cb27-50" tabindex="-1"></a>  <span class="fu">add_markers</span>(<span class="at">x =</span> pred_df<span class="sc">$</span>ds, <span class="at">y =</span> pred_df<span class="sc">$</span>y,</span>
+<span id="cb27-51"><a href="redes-neuronales-recurrentes.html#cb27-51" tabindex="-1"></a>              <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>))</span>
+<span id="cb27-52"><a href="redes-neuronales-recurrentes.html#cb27-52" tabindex="-1"></a></span>
+<span id="cb27-53"><a href="redes-neuronales-recurrentes.html#cb27-53" tabindex="-1"></a><span class="co"># Layout</span></span>
+<span id="cb27-54"><a href="redes-neuronales-recurrentes.html#cb27-54" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb27-55"><a href="redes-neuronales-recurrentes.html#cb27-55" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">&quot;Serie Logarítmica, valores test y predicción Red Elman&quot;</span>,</span>
+<span id="cb27-56"><a href="redes-neuronales-recurrentes.html#cb27-56" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Fecha&quot;</span>),</span>
+<span id="cb27-57"><a href="redes-neuronales-recurrentes.html#cb27-57" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;log(Consumo)&quot;</span>),</span>
+<span id="cb27-58"><a href="redes-neuronales-recurrentes.html#cb27-58" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fl">0.02</span>, <span class="at">y =</span> <span class="fl">0.98</span>, <span class="at">bgcolor =</span> <span class="st">&#39;rgba(255,255,255,0.5)&#39;</span>))</span>
+<span id="cb27-59"><a href="redes-neuronales-recurrentes.html#cb27-59" tabindex="-1"></a></span>
+<span id="cb27-60"><a href="redes-neuronales-recurrentes.html#cb27-60" tabindex="-1"></a>fig</span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-45d5463ab6fd3ae6cf42" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-45d5463ab6fd3ae6cf42">{"x":{"visdat":{"6ac33a33950":["function () ","plotlyVisDat"]},"cur_data":"6ac33a33950","attrs":{"6ac33a33950":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2017-05-19","2017-05-26","2017-06-02","2017-06-09","2017-06-16","2017-06-23","2017-06-30","2017-07-07","2017-07-14","2017-07-21","2017-07-28","2017-08-04","2017-08-11","2017-08-18","2017-08-25","2017-09-01","2017-09-08","2017-09-15","2017-09-22","2017-09-29","2017-10-06","2017-10-13","2017-10-20","2017-10-27","2017-11-03","2017-11-10","2017-11-17","2017-11-24","2017-12-01","2017-12-08","2017-12-15","2017-12-22","2017-12-29","2018-01-05","2018-01-12","2018-01-19","2018-01-26","2018-02-02","2018-02-09","2018-02-16","2018-02-23","2018-03-02","2018-03-09","2018-03-16","2018-03-23","2018-03-30","2018-04-06","2018-04-13","2018-04-20","2018-04-27","2018-05-04","2018-05-11","2018-05-18","2018-05-25","2018-06-01","2018-06-08","2018-06-15","2018-06-22","2018-06-29","2018-07-06","2018-07-13","2018-07-20","2018-07-27","2018-08-03","2018-08-10","2018-08-17","2018-08-24","2018-08-31","2018-09-07","2018-09-14","2018-09-21","2018-09-28","2018-10-05","2018-10-12","2018-10-19","2018-10-26","2018-11-02","2018-11-09","2018-11-16","2018-11-23","2018-11-30","2018-12-07","2018-12-14","2018-12-21","2018-12-28","2019-01-04","2019-01-11","2019-01-18","2019-01-25","2019-02-01","2019-02-08","2019-02-15","2019-02-22","2019-03-01","2019-03-08","2019-03-15","2019-03-22","2019-03-29","2019-04-05","2019-04-12","2019-04-19","2019-04-26","2019-05-03","2019-05-10","2019-05-17","2019-05-24","2019-05-31","2019-06-07","2019-06-14","2019-06-21","2019-06-28","2019-07-05","2019-07-12","2019-07-19","2019-07-26","2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[7.6024013356658182,8.4512670413000706,8.5675060052898271,8.3209349688834102,8.5554519035333279,8.5542962793677404,8.4726141480182697,8.6830465555028855,8.5885831875029108,8.5844779382218341,8.6762461212708377,8.6515492439153157,8.5750846698320142,8.6371072880815749,8.5782882907760492,8.5367997210551554,8.6323059985167419,8.5874652444015691,8.6002467465515231,8.6640602672257891,8.5985888296202315,8.6649233034405722,8.635687085464026,8.6719722452037917,8.5436403614310859,8.371936178759098,8.5646491325725336,8.5308988384723499,8.5716813767003064,8.5016733797582003,8.6101369370589751,8.5265492863402628,8.6340869428877376,8.5600610916434139,8.4259547109819657,8.4929004988471934,8.4307634634178505,8.478660241699453,8.4614690426438752,8.3891325213487189,8.421122722665503,8.4335941675399244,8.2289776433583128,8.3206915710484495,8.2435455079282605,8.2527066765676445,8.2063107257940207,8.2865213736812358,8.2589404629884591,8.2453844681207471,8.2761402195584601,8.3567896699232129,8.3106609059072252,8.1755475960210262,8.0805469658244977,8.153061946801051,8.2591993626662816,8.3306226203328677,8.0362499421321161,8.1432267503674449,8.0478293574578412,8.1909088811825139,8.1828387107660259,8.1440984633385245,8.1327064896932644,8.1605182474775049,8.0900957831809599,8.2573856557304364,8.4156033356546036,8.3274844161882644,8.2260384294854845,8.2995345703325967,8.2980416613715651,8.3158111318835406,8.1542126949142286,8.1622310654811798,8.2738469327845081,8.241966560231802,8.1928471345928653,7.4145728813505887,8.1922937311476396,8.3067190432026905,8.1403155401599854,8.3560850310214807,8.2464337861603649,8.1836765826206577,8.3000317117795746,8.2204030999337299,8.261009786023827,8.1861859942260828,8.3772412309887923,8.2079469410486166,8.3301404602463816,8.3197173868506056,8.2076744243552824,8.1241506033066297,8.2607513547005134,8.2669353476104561,8.1693363959283865,8.1909088811825139,8.1545001751519415,8.2052184263954118,8.339739766019143,8.1573704411867745,8.5237715067763595,8.3332703532553083,8.2751216302165087,8.2474820042856933,8.2308435641982349,8.2753763748364069,8.3084455203857601,8.2852611340689482,8.1542126949142286,8.3567896699232129,8.1942293048198174,8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Serie Logarítmica Completa","line":{"color":"black","width":2},"inherit":true},"6ac33a33950.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Valores Test Reales","line":{"color":"red","width":2},"inherit":true},"6ac33a33950.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"markers","marker":{"color":"red","size":6},"inherit":true},"6ac33a33950.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2358188298384025,8.2648943792668277,8.2509013524310628,8.2545016028788005,8.2528353019082079,8.2570549998740752,8.2571150317707431,8.2548922638486744,8.255347266309812,8.2555118625806507],"type":"scatter","mode":"lines","name":"Predicción Red Elman","line":{"color":"blue","width":2},"inherit":true},"6ac33a33950.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2358188298384025,8.2648943792668277,8.2509013524310628,8.2545016028788005,8.2528353019082079,8.2570549998740752,8.2571150317707431,8.2548922638486744,8.255347266309812,8.2555118625806507],"type":"scatter","mode":"markers","marker":{"color":"blue","size":6},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Serie Logarítmica, valores test y predicción Red Elman","xaxis":{"domain":[0,1],"automargin":true,"title":"Fecha"},"yaxis":{"domain":[0,1],"automargin":true,"title":"log(Consumo)"},"legend":{"x":0.02,"y":0.97999999999999998,"bgcolor":"rgba(255,255,255,0.5)"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["2017-05-19","2017-05-26","2017-06-02","2017-06-09","2017-06-16","2017-06-23","2017-06-30","2017-07-07","2017-07-14","2017-07-21","2017-07-28","2017-08-04","2017-08-11","2017-08-18","2017-08-25","2017-09-01","2017-09-08","2017-09-15","2017-09-22","2017-09-29","2017-10-06","2017-10-13","2017-10-20","2017-10-27","2017-11-03","2017-11-10","2017-11-17","2017-11-24","2017-12-01","2017-12-08","2017-12-15","2017-12-22","2017-12-29","2018-01-05","2018-01-12","2018-01-19","2018-01-26","2018-02-02","2018-02-09","2018-02-16","2018-02-23","2018-03-02","2018-03-09","2018-03-16","2018-03-23","2018-03-30","2018-04-06","2018-04-13","2018-04-20","2018-04-27","2018-05-04","2018-05-11","2018-05-18","2018-05-25","2018-06-01","2018-06-08","2018-06-15","2018-06-22","2018-06-29","2018-07-06","2018-07-13","2018-07-20","2018-07-27","2018-08-03","2018-08-10","2018-08-17","2018-08-24","2018-08-31","2018-09-07","2018-09-14","2018-09-21","2018-09-28","2018-10-05","2018-10-12","2018-10-19","2018-10-26","2018-11-02","2018-11-09","2018-11-16","2018-11-23","2018-11-30","2018-12-07","2018-12-14","2018-12-21","2018-12-28","2019-01-04","2019-01-11","2019-01-18","2019-01-25","2019-02-01","2019-02-08","2019-02-15","2019-02-22","2019-03-01","2019-03-08","2019-03-15","2019-03-22","2019-03-29","2019-04-05","2019-04-12","2019-04-19","2019-04-26","2019-05-03","2019-05-10","2019-05-17","2019-05-24","2019-05-31","2019-06-07","2019-06-14","2019-06-21","2019-06-28","2019-07-05","2019-07-12","2019-07-19","2019-07-26","2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[7.6024013356658182,8.4512670413000706,8.5675060052898271,8.3209349688834102,8.5554519035333279,8.5542962793677404,8.4726141480182697,8.6830465555028855,8.5885831875029108,8.5844779382218341,8.6762461212708377,8.6515492439153157,8.5750846698320142,8.6371072880815749,8.5782882907760492,8.5367997210551554,8.6323059985167419,8.5874652444015691,8.6002467465515231,8.6640602672257891,8.5985888296202315,8.6649233034405722,8.635687085464026,8.6719722452037917,8.5436403614310859,8.371936178759098,8.5646491325725336,8.5308988384723499,8.5716813767003064,8.5016733797582003,8.6101369370589751,8.5265492863402628,8.6340869428877376,8.5600610916434139,8.4259547109819657,8.4929004988471934,8.4307634634178505,8.478660241699453,8.4614690426438752,8.3891325213487189,8.421122722665503,8.4335941675399244,8.2289776433583128,8.3206915710484495,8.2435455079282605,8.2527066765676445,8.2063107257940207,8.2865213736812358,8.2589404629884591,8.2453844681207471,8.2761402195584601,8.3567896699232129,8.3106609059072252,8.1755475960210262,8.0805469658244977,8.153061946801051,8.2591993626662816,8.3306226203328677,8.0362499421321161,8.1432267503674449,8.0478293574578412,8.1909088811825139,8.1828387107660259,8.1440984633385245,8.1327064896932644,8.1605182474775049,8.0900957831809599,8.2573856557304364,8.4156033356546036,8.3274844161882644,8.2260384294854845,8.2995345703325967,8.2980416613715651,8.3158111318835406,8.1542126949142286,8.1622310654811798,8.2738469327845081,8.241966560231802,8.1928471345928653,7.4145728813505887,8.1922937311476396,8.3067190432026905,8.1403155401599854,8.3560850310214807,8.2464337861603649,8.1836765826206577,8.3000317117795746,8.2204030999337299,8.261009786023827,8.1861859942260828,8.3772412309887923,8.2079469410486166,8.3301404602463816,8.3197173868506056,8.2076744243552824,8.1241506033066297,8.2607513547005134,8.2669353476104561,8.1693363959283865,8.1909088811825139,8.1545001751519415,8.2052184263954118,8.339739766019143,8.1573704411867745,8.5237715067763595,8.3332703532553083,8.2751216302165087,8.2474820042856933,8.2308435641982349,8.2753763748364069,8.3084455203857601,8.2852611340689482,8.1542126949142286,8.3567896699232129,8.1942293048198174,8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Serie Logarítmica Completa","line":{"color":"black","width":2},"marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Valores Test Reales","line":{"color":"red","width":2},"marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"markers","marker":{"color":"red","size":6,"line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"line":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2358188298384025,8.2648943792668277,8.2509013524310628,8.2545016028788005,8.2528353019082079,8.2570549998740752,8.2571150317707431,8.2548922638486744,8.255347266309812,8.2555118625806507],"type":"scatter","mode":"lines","name":"Predicción Red Elman","line":{"color":"blue","width":2},"marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2019-08-02","2019-08-09","2019-08-16","2019-08-23","2019-08-30","2019-09-06","2019-09-13","2019-09-20","2019-09-27","2019-10-04"],"y":[8.2358188298384025,8.2648943792668277,8.2509013524310628,8.2545016028788005,8.2528353019082079,8.2570549998740752,8.2571150317707431,8.2548922638486744,8.255347266309812,8.2555118625806507],"type":"scatter","mode":"markers","marker":{"color":"blue","size":6,"line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"line":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="red-de-jordan" class="section level3 hasAnchor" number="7.2.5">
+<h3><span class="header-section-number">7.2.5</span> Red de JORDAN<a href="redes-neuronales-recurrentes.html#red-de-jordan" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="redes-neuronales-recurrentes.html#cb28-1" tabindex="-1"></a><span class="fu">library</span>(RSNNS)</span>
+<span id="cb28-2"><a href="redes-neuronales-recurrentes.html#cb28-2" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb28-3"><a href="redes-neuronales-recurrentes.html#cb28-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb28-4"><a href="redes-neuronales-recurrentes.html#cb28-4" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb28-5"><a href="redes-neuronales-recurrentes.html#cb28-5" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="redes-neuronales-recurrentes.html#cb28-6" tabindex="-1"></a><span class="co"># Crear dataset con lags</span></span>
+<span id="cb28-7"><a href="redes-neuronales-recurrentes.html#cb28-7" tabindex="-1"></a>createLaggedMatrix <span class="ot">&lt;-</span> <span class="cf">function</span>(series, lags) {</span>
+<span id="cb28-8"><a href="redes-neuronales-recurrentes.html#cb28-8" tabindex="-1"></a>  <span class="fu">embed</span>(series, lags <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb28-9"><a href="redes-neuronales-recurrentes.html#cb28-9" tabindex="-1"></a>}</span>
+<span id="cb28-10"><a href="redes-neuronales-recurrentes.html#cb28-10" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="redes-neuronales-recurrentes.html#cb28-11" tabindex="-1"></a>lags <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb28-12"><a href="redes-neuronales-recurrentes.html#cb28-12" tabindex="-1"></a>data_lagged <span class="ot">&lt;-</span> <span class="fu">createLaggedMatrix</span>(<span class="fu">as.numeric</span>(serie_log), lags)</span>
+<span id="cb28-13"><a href="redes-neuronales-recurrentes.html#cb28-13" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="redes-neuronales-recurrentes.html#cb28-14" tabindex="-1"></a>X <span class="ot">&lt;-</span> data_lagged[, <span class="dv">2</span><span class="sc">:</span>(lags <span class="sc">+</span> <span class="dv">1</span>)]</span>
+<span id="cb28-15"><a href="redes-neuronales-recurrentes.html#cb28-15" tabindex="-1"></a>y <span class="ot">&lt;-</span> data_lagged[, <span class="dv">1</span>]</span>
+<span id="cb28-16"><a href="redes-neuronales-recurrentes.html#cb28-16" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="redes-neuronales-recurrentes.html#cb28-17" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(X)</span>
+<span id="cb28-18"><a href="redes-neuronales-recurrentes.html#cb28-18" tabindex="-1"></a>train_idx <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>(n <span class="sc">-</span> h)</span>
+<span id="cb28-19"><a href="redes-neuronales-recurrentes.html#cb28-19" tabindex="-1"></a>test_idx  <span class="ot">&lt;-</span> (n <span class="sc">-</span> h <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n</span>
+<span id="cb28-20"><a href="redes-neuronales-recurrentes.html#cb28-20" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="redes-neuronales-recurrentes.html#cb28-21" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> X[train_idx, ]</span>
+<span id="cb28-22"><a href="redes-neuronales-recurrentes.html#cb28-22" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> y[train_idx]</span>
+<span id="cb28-23"><a href="redes-neuronales-recurrentes.html#cb28-23" tabindex="-1"></a>X_test  <span class="ot">&lt;-</span> X[test_idx, ]</span>
+<span id="cb28-24"><a href="redes-neuronales-recurrentes.html#cb28-24" tabindex="-1"></a>y_test  <span class="ot">&lt;-</span> y[test_idx]</span>
+<span id="cb28-25"><a href="redes-neuronales-recurrentes.html#cb28-25" tabindex="-1"></a></span>
+<span id="cb28-26"><a href="redes-neuronales-recurrentes.html#cb28-26" tabindex="-1"></a><span class="co"># Entrenar Red de Jordan</span></span>
+<span id="cb28-27"><a href="redes-neuronales-recurrentes.html#cb28-27" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb28-28"><a href="redes-neuronales-recurrentes.html#cb28-28" tabindex="-1"></a>modelo_jordan <span class="ot">&lt;-</span> <span class="fu">jordan</span>(</span>
+<span id="cb28-29"><a href="redes-neuronales-recurrentes.html#cb28-29" tabindex="-1"></a>  X_train, y_train,</span>
+<span id="cb28-30"><a href="redes-neuronales-recurrentes.html#cb28-30" tabindex="-1"></a>  <span class="at">size =</span> <span class="dv">15</span>,</span>
+<span id="cb28-31"><a href="redes-neuronales-recurrentes.html#cb28-31" tabindex="-1"></a>  <span class="at">learnFuncParams =</span> <span class="fu">c</span>(<span class="fl">0.01</span>),  <span class="co"># Puedes ajustar</span></span>
+<span id="cb28-32"><a href="redes-neuronales-recurrentes.html#cb28-32" tabindex="-1"></a>  <span class="at">maxit =</span> <span class="dv">500</span>,</span>
+<span id="cb28-33"><a href="redes-neuronales-recurrentes.html#cb28-33" tabindex="-1"></a>  <span class="at">linOut =</span> <span class="cn">TRUE</span></span>
+<span id="cb28-34"><a href="redes-neuronales-recurrentes.html#cb28-34" tabindex="-1"></a>)</span>
+<span id="cb28-35"><a href="redes-neuronales-recurrentes.html#cb28-35" tabindex="-1"></a></span>
+<span id="cb28-36"><a href="redes-neuronales-recurrentes.html#cb28-36" tabindex="-1"></a><span class="co"># Predicciones</span></span>
+<span id="cb28-37"><a href="redes-neuronales-recurrentes.html#cb28-37" tabindex="-1"></a>pred_jordan <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">predict</span>(modelo_jordan, X_test))</span>
+<span id="cb28-38"><a href="redes-neuronales-recurrentes.html#cb28-38" tabindex="-1"></a></span>
+<span id="cb28-39"><a href="redes-neuronales-recurrentes.html#cb28-39" tabindex="-1"></a><span class="co"># Crear DataFrames para Plotly</span></span>
+<span id="cb28-40"><a href="redes-neuronales-recurrentes.html#cb28-40" tabindex="-1"></a>fechas <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(<span class="at">from =</span> <span class="fu">as.Date</span>(<span class="st">&quot;2015-01-01&quot;</span>), <span class="at">by =</span> <span class="st">&quot;week&quot;</span>, <span class="at">length.out =</span> <span class="fu">length</span>(serie_log))</span>
+<span id="cb28-41"><a href="redes-neuronales-recurrentes.html#cb28-41" tabindex="-1"></a></span>
+<span id="cb28-42"><a href="redes-neuronales-recurrentes.html#cb28-42" tabindex="-1"></a>serie_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ds =</span> fechas, <span class="at">value =</span> <span class="fu">as.numeric</span>(serie_log))</span>
+<span id="cb28-43"><a href="redes-neuronales-recurrentes.html#cb28-43" tabindex="-1"></a></span>
+<span id="cb28-44"><a href="redes-neuronales-recurrentes.html#cb28-44" tabindex="-1"></a>test_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-45"><a href="redes-neuronales-recurrentes.html#cb28-45" tabindex="-1"></a>  <span class="at">ds =</span> fechas[(<span class="fu">length</span>(fechas) <span class="sc">-</span> h <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">length</span>(fechas)],</span>
+<span id="cb28-46"><a href="redes-neuronales-recurrentes.html#cb28-46" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">as.numeric</span>(y_test)</span>
+<span id="cb28-47"><a href="redes-neuronales-recurrentes.html#cb28-47" tabindex="-1"></a>)</span>
+<span id="cb28-48"><a href="redes-neuronales-recurrentes.html#cb28-48" tabindex="-1"></a></span>
+<span id="cb28-49"><a href="redes-neuronales-recurrentes.html#cb28-49" tabindex="-1"></a>pred_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-50"><a href="redes-neuronales-recurrentes.html#cb28-50" tabindex="-1"></a>  <span class="at">ds =</span> test_df<span class="sc">$</span>ds,</span>
+<span id="cb28-51"><a href="redes-neuronales-recurrentes.html#cb28-51" tabindex="-1"></a>  <span class="at">y =</span> pred_jordan</span>
+<span id="cb28-52"><a href="redes-neuronales-recurrentes.html#cb28-52" tabindex="-1"></a>)</span>
+<span id="cb28-53"><a href="redes-neuronales-recurrentes.html#cb28-53" tabindex="-1"></a></span>
+<span id="cb28-54"><a href="redes-neuronales-recurrentes.html#cb28-54" tabindex="-1"></a><span class="co"># Graficar con Plotly</span></span>
+<span id="cb28-55"><a href="redes-neuronales-recurrentes.html#cb28-55" tabindex="-1"></a>fig <span class="ot">&lt;-</span> <span class="fu">plot_ly</span>()</span>
+<span id="cb28-56"><a href="redes-neuronales-recurrentes.html#cb28-56" tabindex="-1"></a></span>
+<span id="cb28-57"><a href="redes-neuronales-recurrentes.html#cb28-57" tabindex="-1"></a><span class="co"># Serie completa (negro)</span></span>
+<span id="cb28-58"><a href="redes-neuronales-recurrentes.html#cb28-58" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb28-59"><a href="redes-neuronales-recurrentes.html#cb28-59" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> serie_df<span class="sc">$</span>ds, <span class="at">y =</span> serie_df<span class="sc">$</span>value,</span>
+<span id="cb28-60"><a href="redes-neuronales-recurrentes.html#cb28-60" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Serie Logarítmica Completa&quot;</span>,</span>
+<span id="cb28-61"><a href="redes-neuronales-recurrentes.html#cb28-61" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>))</span>
+<span id="cb28-62"><a href="redes-neuronales-recurrentes.html#cb28-62" tabindex="-1"></a></span>
+<span id="cb28-63"><a href="redes-neuronales-recurrentes.html#cb28-63" tabindex="-1"></a><span class="co"># Valores reales test (rojo)</span></span>
+<span id="cb28-64"><a href="redes-neuronales-recurrentes.html#cb28-64" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb28-65"><a href="redes-neuronales-recurrentes.html#cb28-65" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> test_df<span class="sc">$</span>ds, <span class="at">y =</span> test_df<span class="sc">$</span>y,</span>
+<span id="cb28-66"><a href="redes-neuronales-recurrentes.html#cb28-66" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Valores Test Reales&quot;</span>,</span>
+<span id="cb28-67"><a href="redes-neuronales-recurrentes.html#cb28-67" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-68"><a href="redes-neuronales-recurrentes.html#cb28-68" tabindex="-1"></a>  <span class="fu">add_markers</span>(<span class="at">x =</span> test_df<span class="sc">$</span>ds, <span class="at">y =</span> test_df<span class="sc">$</span>y,</span>
+<span id="cb28-69"><a href="redes-neuronales-recurrentes.html#cb28-69" tabindex="-1"></a>              <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>))</span>
+<span id="cb28-70"><a href="redes-neuronales-recurrentes.html#cb28-70" tabindex="-1"></a></span>
+<span id="cb28-71"><a href="redes-neuronales-recurrentes.html#cb28-71" tabindex="-1"></a><span class="co"># Predicciones (azul)</span></span>
+<span id="cb28-72"><a href="redes-neuronales-recurrentes.html#cb28-72" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb28-73"><a href="redes-neuronales-recurrentes.html#cb28-73" tabindex="-1"></a>  <span class="fu">add_lines</span>(<span class="at">x =</span> pred_df<span class="sc">$</span>ds, <span class="at">y =</span> pred_df<span class="sc">$</span>y,</span>
+<span id="cb28-74"><a href="redes-neuronales-recurrentes.html#cb28-74" tabindex="-1"></a>            <span class="at">name =</span> <span class="st">&quot;Predicción Jordan&quot;</span>,</span>
+<span id="cb28-75"><a href="redes-neuronales-recurrentes.html#cb28-75" tabindex="-1"></a>            <span class="at">line =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">width =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-76"><a href="redes-neuronales-recurrentes.html#cb28-76" tabindex="-1"></a>  <span class="fu">add_markers</span>(<span class="at">x =</span> pred_df<span class="sc">$</span>ds, <span class="at">y =</span> pred_df<span class="sc">$</span>y,</span>
+<span id="cb28-77"><a href="redes-neuronales-recurrentes.html#cb28-77" tabindex="-1"></a>              <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>))</span>
+<span id="cb28-78"><a href="redes-neuronales-recurrentes.html#cb28-78" tabindex="-1"></a></span>
+<span id="cb28-79"><a href="redes-neuronales-recurrentes.html#cb28-79" tabindex="-1"></a><span class="co"># Layout</span></span>
+<span id="cb28-80"><a href="redes-neuronales-recurrentes.html#cb28-80" tabindex="-1"></a>fig <span class="ot">&lt;-</span> fig <span class="sc">%&gt;%</span></span>
+<span id="cb28-81"><a href="redes-neuronales-recurrentes.html#cb28-81" tabindex="-1"></a>  <span class="fu">layout</span>(<span class="at">title =</span> <span class="st">&quot;Predicción con Red de Jordan&quot;</span>,</span>
+<span id="cb28-82"><a href="redes-neuronales-recurrentes.html#cb28-82" tabindex="-1"></a>         <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Fecha&quot;</span>),</span>
+<span id="cb28-83"><a href="redes-neuronales-recurrentes.html#cb28-83" tabindex="-1"></a>         <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Log Consumo&quot;</span>),</span>
+<span id="cb28-84"><a href="redes-neuronales-recurrentes.html#cb28-84" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fl">0.02</span>, <span class="at">y =</span> <span class="fl">0.98</span>))</span>
+<span id="cb28-85"><a href="redes-neuronales-recurrentes.html#cb28-85" tabindex="-1"></a></span>
+<span id="cb28-86"><a href="redes-neuronales-recurrentes.html#cb28-86" tabindex="-1"></a>fig</span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-497d7b7e6a3934534093" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-497d7b7e6a3934534093">{"x":{"visdat":{"6ac5db35475":["function () ","plotlyVisDat"]},"cur_data":"6ac5db35475","attrs":{"6ac5db35475":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2015-01-01","2015-01-08","2015-01-15","2015-01-22","2015-01-29","2015-02-05","2015-02-12","2015-02-19","2015-02-26","2015-03-05","2015-03-12","2015-03-19","2015-03-26","2015-04-02","2015-04-09","2015-04-16","2015-04-23","2015-04-30","2015-05-07","2015-05-14","2015-05-21","2015-05-28","2015-06-04","2015-06-11","2015-06-18","2015-06-25","2015-07-02","2015-07-09","2015-07-16","2015-07-23","2015-07-30","2015-08-06","2015-08-13","2015-08-20","2015-08-27","2015-09-03","2015-09-10","2015-09-17","2015-09-24","2015-10-01","2015-10-08","2015-10-15","2015-10-22","2015-10-29","2015-11-05","2015-11-12","2015-11-19","2015-11-26","2015-12-03","2015-12-10","2015-12-17","2015-12-24","2015-12-31","2016-01-07","2016-01-14","2016-01-21","2016-01-28","2016-02-04","2016-02-11","2016-02-18","2016-02-25","2016-03-03","2016-03-10","2016-03-17","2016-03-24","2016-03-31","2016-04-07","2016-04-14","2016-04-21","2016-04-28","2016-05-05","2016-05-12","2016-05-19","2016-05-26","2016-06-02","2016-06-09","2016-06-16","2016-06-23","2016-06-30","2016-07-07","2016-07-14","2016-07-21","2016-07-28","2016-08-04","2016-08-11","2016-08-18","2016-08-25","2016-09-01","2016-09-08","2016-09-15","2016-09-22","2016-09-29","2016-10-06","2016-10-13","2016-10-20","2016-10-27","2016-11-03","2016-11-10","2016-11-17","2016-11-24","2016-12-01","2016-12-08","2016-12-15","2016-12-22","2016-12-29","2017-01-05","2017-01-12","2017-01-19","2017-01-26","2017-02-02","2017-02-09","2017-02-16","2017-02-23","2017-03-02","2017-03-09","2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[7.6024013356658182,8.4512670413000706,8.5675060052898271,8.3209349688834102,8.5554519035333279,8.5542962793677404,8.4726141480182697,8.6830465555028855,8.5885831875029108,8.5844779382218341,8.6762461212708377,8.6515492439153157,8.5750846698320142,8.6371072880815749,8.5782882907760492,8.5367997210551554,8.6323059985167419,8.5874652444015691,8.6002467465515231,8.6640602672257891,8.5985888296202315,8.6649233034405722,8.635687085464026,8.6719722452037917,8.5436403614310859,8.371936178759098,8.5646491325725336,8.5308988384723499,8.5716813767003064,8.5016733797582003,8.6101369370589751,8.5265492863402628,8.6340869428877376,8.5600610916434139,8.4259547109819657,8.4929004988471934,8.4307634634178505,8.478660241699453,8.4614690426438752,8.3891325213487189,8.421122722665503,8.4335941675399244,8.2289776433583128,8.3206915710484495,8.2435455079282605,8.2527066765676445,8.2063107257940207,8.2865213736812358,8.2589404629884591,8.2453844681207471,8.2761402195584601,8.3567896699232129,8.3106609059072252,8.1755475960210262,8.0805469658244977,8.153061946801051,8.2591993626662816,8.3306226203328677,8.0362499421321161,8.1432267503674449,8.0478293574578412,8.1909088811825139,8.1828387107660259,8.1440984633385245,8.1327064896932644,8.1605182474775049,8.0900957831809599,8.2573856557304364,8.4156033356546036,8.3274844161882644,8.2260384294854845,8.2995345703325967,8.2980416613715651,8.3158111318835406,8.1542126949142286,8.1622310654811798,8.2738469327845081,8.241966560231802,8.1928471345928653,7.4145728813505887,8.1922937311476396,8.3067190432026905,8.1403155401599854,8.3560850310214807,8.2464337861603649,8.1836765826206577,8.3000317117795746,8.2204030999337299,8.261009786023827,8.1861859942260828,8.3772412309887923,8.2079469410486166,8.3301404602463816,8.3197173868506056,8.2076744243552824,8.1241506033066297,8.2607513547005134,8.2669353476104561,8.1693363959283865,8.1909088811825139,8.1545001751519415,8.2052184263954118,8.339739766019143,8.1573704411867745,8.5237715067763595,8.3332703532553083,8.2751216302165087,8.2474820042856933,8.2308435641982349,8.2753763748364069,8.3084455203857601,8.2852611340689482,8.1542126949142286,8.3567896699232129,8.1942293048198174,8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Serie Logarítmica Completa","line":{"color":"black","width":2},"inherit":true},"6ac5db35475.1":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Valores Test Reales","line":{"color":"red","width":2},"inherit":true},"6ac5db35475.2":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"markers","marker":{"color":"red","size":6},"inherit":true},"6ac5db35475.3":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2491350173950195,8.2546329498291016,8.2624673843383789,8.2481937408447266,8.2586879730224609,8.2571449279785156,8.25299072265625,8.2539882659912109,8.2595930099487305,8.2637701034545898],"type":"scatter","mode":"lines","name":"Predicción Jordan","line":{"color":"blue","width":2},"inherit":true},"6ac5db35475.4":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2491350173950195,8.2546329498291016,8.2624673843383789,8.2481937408447266,8.2586879730224609,8.2571449279785156,8.25299072265625,8.2539882659912109,8.2595930099487305,8.2637701034545898],"type":"scatter","mode":"markers","marker":{"color":"blue","size":6},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Predicción con Red de Jordan","xaxis":{"domain":[0,1],"automargin":true,"title":"Fecha"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Log Consumo"},"legend":{"x":0.02,"y":0.97999999999999998},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["2015-01-01","2015-01-08","2015-01-15","2015-01-22","2015-01-29","2015-02-05","2015-02-12","2015-02-19","2015-02-26","2015-03-05","2015-03-12","2015-03-19","2015-03-26","2015-04-02","2015-04-09","2015-04-16","2015-04-23","2015-04-30","2015-05-07","2015-05-14","2015-05-21","2015-05-28","2015-06-04","2015-06-11","2015-06-18","2015-06-25","2015-07-02","2015-07-09","2015-07-16","2015-07-23","2015-07-30","2015-08-06","2015-08-13","2015-08-20","2015-08-27","2015-09-03","2015-09-10","2015-09-17","2015-09-24","2015-10-01","2015-10-08","2015-10-15","2015-10-22","2015-10-29","2015-11-05","2015-11-12","2015-11-19","2015-11-26","2015-12-03","2015-12-10","2015-12-17","2015-12-24","2015-12-31","2016-01-07","2016-01-14","2016-01-21","2016-01-28","2016-02-04","2016-02-11","2016-02-18","2016-02-25","2016-03-03","2016-03-10","2016-03-17","2016-03-24","2016-03-31","2016-04-07","2016-04-14","2016-04-21","2016-04-28","2016-05-05","2016-05-12","2016-05-19","2016-05-26","2016-06-02","2016-06-09","2016-06-16","2016-06-23","2016-06-30","2016-07-07","2016-07-14","2016-07-21","2016-07-28","2016-08-04","2016-08-11","2016-08-18","2016-08-25","2016-09-01","2016-09-08","2016-09-15","2016-09-22","2016-09-29","2016-10-06","2016-10-13","2016-10-20","2016-10-27","2016-11-03","2016-11-10","2016-11-17","2016-11-24","2016-12-01","2016-12-08","2016-12-15","2016-12-22","2016-12-29","2017-01-05","2017-01-12","2017-01-19","2017-01-26","2017-02-02","2017-02-09","2017-02-16","2017-02-23","2017-03-02","2017-03-09","2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[7.6024013356658182,8.4512670413000706,8.5675060052898271,8.3209349688834102,8.5554519035333279,8.5542962793677404,8.4726141480182697,8.6830465555028855,8.5885831875029108,8.5844779382218341,8.6762461212708377,8.6515492439153157,8.5750846698320142,8.6371072880815749,8.5782882907760492,8.5367997210551554,8.6323059985167419,8.5874652444015691,8.6002467465515231,8.6640602672257891,8.5985888296202315,8.6649233034405722,8.635687085464026,8.6719722452037917,8.5436403614310859,8.371936178759098,8.5646491325725336,8.5308988384723499,8.5716813767003064,8.5016733797582003,8.6101369370589751,8.5265492863402628,8.6340869428877376,8.5600610916434139,8.4259547109819657,8.4929004988471934,8.4307634634178505,8.478660241699453,8.4614690426438752,8.3891325213487189,8.421122722665503,8.4335941675399244,8.2289776433583128,8.3206915710484495,8.2435455079282605,8.2527066765676445,8.2063107257940207,8.2865213736812358,8.2589404629884591,8.2453844681207471,8.2761402195584601,8.3567896699232129,8.3106609059072252,8.1755475960210262,8.0805469658244977,8.153061946801051,8.2591993626662816,8.3306226203328677,8.0362499421321161,8.1432267503674449,8.0478293574578412,8.1909088811825139,8.1828387107660259,8.1440984633385245,8.1327064896932644,8.1605182474775049,8.0900957831809599,8.2573856557304364,8.4156033356546036,8.3274844161882644,8.2260384294854845,8.2995345703325967,8.2980416613715651,8.3158111318835406,8.1542126949142286,8.1622310654811798,8.2738469327845081,8.241966560231802,8.1928471345928653,7.4145728813505887,8.1922937311476396,8.3067190432026905,8.1403155401599854,8.3560850310214807,8.2464337861603649,8.1836765826206577,8.3000317117795746,8.2204030999337299,8.261009786023827,8.1861859942260828,8.3772412309887923,8.2079469410486166,8.3301404602463816,8.3197173868506056,8.2076744243552824,8.1241506033066297,8.2607513547005134,8.2669353476104561,8.1693363959283865,8.1909088811825139,8.1545001751519415,8.2052184263954118,8.339739766019143,8.1573704411867745,8.5237715067763595,8.3332703532553083,8.2751216302165087,8.2474820042856933,8.2308435641982349,8.2753763748364069,8.3084455203857601,8.2852611340689482,8.1542126949142286,8.3567896699232129,8.1942293048198174,8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Serie Logarítmica Completa","line":{"color":"black","width":2},"marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"lines","name":"Valores Test Reales","line":{"color":"red","width":2},"marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2271082343481456,8.3380665255188013,8.2321742363839405,8.1903544037632621,8.2035777369379517,8.391176350832751,8.3274844161882644,8.1922937311476396,8.2268408904085781,6.131226489483141],"type":"scatter","mode":"markers","marker":{"color":"red","size":6,"line":{"color":"rgba(44,160,44,1)"}},"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"line":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2491350173950195,8.2546329498291016,8.2624673843383789,8.2481937408447266,8.2586879730224609,8.2571449279785156,8.25299072265625,8.2539882659912109,8.2595930099487305,8.2637701034545898],"type":"scatter","mode":"lines","name":"Predicción Jordan","line":{"color":"blue","width":2},"marker":{"color":"rgba(214,39,40,1)","line":{"color":"rgba(214,39,40,1)"}},"error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2017-03-16","2017-03-23","2017-03-30","2017-04-06","2017-04-13","2017-04-20","2017-04-27","2017-05-04","2017-05-11","2017-05-18"],"y":[8.2491350173950195,8.2546329498291016,8.2624673843383789,8.2481937408447266,8.2586879730224609,8.2571449279785156,8.25299072265625,8.2539882659912109,8.2595930099487305,8.2637701034545898],"type":"scatter","mode":"markers","marker":{"color":"blue","size":6,"line":{"color":"rgba(148,103,189,1)"}},"error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"line":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Se observa en las redes de ELMAN y JORDAN podemos observar que no se ajusta a los datos, de hecho se observa que el pronostico se realiza en forma lineal en ambos casos, esto puede deberse a que la serie presenta una estacionalidad clara ademas de una tendencia pronunciada, siendo una posible causa de que los pronósticos no sean muy precisos.</p>
+</div>
+</div>
+</div>
+<h3>Referencias<a href="referencias.html#referencias" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="ref-Hilera2000" class="csl-entry">
+González, José Ramón Hilera, and Víctor José Martínez Hernando. 2000. <em>Redes Neuronales Artificiales: Fundamentos, Modelos y Aplicaciones</em>. Ra-Ma. <a href="https://www.researchgate.net/publication/44343683_Redes_neuronales_artificiales_fundamentos_modelos_y_aplicaciones_Jose_Ramon_Hilera_Gonzalez_Victor_Jose_Martinez_Hernando">https://www.researchgate.net/publication/44343683_Redes_neuronales_artificiales_fundamentos_modelos_y_aplicaciones_Jose_Ramon_Hilera_Gonzalez_Victor_Jose_Martinez_Hernando</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="resutados-y-conclusiones..html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/ARIMA.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["Analisis-Consumo-Agua.pdf", "Analisis-Consumo-Agua.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

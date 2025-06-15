@@ -23,7 +23,7 @@
 <meta name="author" content="Dany Enriquez" />
 
 
-<meta name="date" content="2025-05-23" />
+<meta name="date" content="2025-06-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -216,8 +216,27 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="6.1" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#regresión-de-una-serie"><i class="fa fa-check"></i><b>6.1</b> Regresión de una serie</a></li>
 <li class="chapter" data-level="6.2" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#algoritmo-facebooks-prophet"><i class="fa fa-check"></i><b>6.2</b> Algoritmo Facebook´s Prophet</a></li>
-<li class="chapter" data-level="6.3" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#verificación-de-los-residuos"><i class="fa fa-check"></i><b>6.3</b> Verificación de los residuos</a></li>
+<li class="chapter" data-level="6.3" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#modelado-1"><i class="fa fa-check"></i><b>6.3</b> Modelado</a></li>
+<li class="chapter" data-level="6.4" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#verificación-de-los-residuos"><i class="fa fa-check"></i><b>6.4</b> Verificación de los residuos</a></li>
+<li class="chapter" data-level="6.5" data-path="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html"><a href="regresion-de-una-serie-y-algoritmo-facebooks-prophet.html#conclusion"><i class="fa fa-check"></i><b>6.5</b> Conclusion</a></li>
 </ul></li>
+<li class="chapter" data-level="7" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html"><i class="fa fa-check"></i><b>7</b> Redes Neuronales Recurrentes</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-ann"><i class="fa fa-check"></i><b>7.1</b> Redes Neuronales (ANN)</a></li>
+<li class="chapter" data-level="7.2" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-recurrentes-rnn"><i class="fa fa-check"></i><b>7.2</b> Redes Neuronales Recurrentes (RNN)</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-de-elman"><i class="fa fa-check"></i><b>7.2.1</b> Redes Neuronales de ELMAN</a></li>
+<li class="chapter" data-level="7.2.2" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#redes-neuronales-de-jordan"><i class="fa fa-check"></i><b>7.2.2</b> Redes Neuronales de Jordan</a></li>
+<li class="chapter" data-level="7.2.3" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#comparacion-redes-de-jordan-y-elman"><i class="fa fa-check"></i><b>7.2.3</b> Comparacion Redes de Jordan y Elman</a></li>
+<li class="chapter" data-level="7.2.4" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#modelado-redes-de-elman"><i class="fa fa-check"></i><b>7.2.4</b> Modelado Redes De ELMAN</a></li>
+<li class="chapter" data-level="7.2.5" data-path="redes-neuronales-recurrentes.html"><a href="redes-neuronales-recurrentes.html#red-de-jordan"><i class="fa fa-check"></i><b>7.2.5</b> Red de JORDAN</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="resutados-y-conclusiones..html"><a href="resutados-y-conclusiones..html"><i class="fa fa-check"></i><b>8</b> Resutados y Conclusiones.</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="resutados-y-conclusiones..html"><a href="resutados-y-conclusiones..html#rmse"><i class="fa fa-check"></i><b>8.0.1</b> RMSE</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>9</b> Conclusiones</a></li>
 <li class="chapter" data-level="" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i>Referencias</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -247,14 +266,14 @@ div.csl-indent {
 <p>Teniendo en cuenta la fase de preprocesamiento, se observa que la serie transformada por el logaritmo (es decir no se uso la serie diferenciada que es estacionaria) presenta una estacionalidad visible, así como una tendencia definida, caracterizada por un comportamiento que decrece, se estabiliza y vuelve a decrecer. Esto indica que cumple con los criterios visuales necesarios para aplicar la metodología en cuestión. Además, el patrón estacional parece ser claro y repetitivo, lo cual sugiere la presencia de una estacionalidad aditiva. No obstante, al implementar el modelo, es importante considerar los residuos, ya que se identifican picos que podrían estar asociados a eventos atípicos o posibles errores de medición.</p>
 <p>Cabe resaltar que esta metodología no requiere que la serie sea estacionaria. En cambio, se enfoca en identificar una tendencia y una estacionalidad bien definidas, ya que el pronóstico se basa en estos dos componentes junto con la media de la serie.</p>
 <pre><code>## RMSE: 0.7559494</code></pre>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
 <p>Se observa que los valores pronosticados se ajustan adecuadamente al comportamiento general de la serie; sin embargo, tienden a sobreestimar los valores reales.</p>
 </div>
 <div id="analisis-de-los-residuos" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Analisis de los Residuos<a href="pronosticos.html#analisis-de-los-residuos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Examinaremos los residuos del modelo para evaluar si este ha logrado capturar adecuadamente la estructura subyacente de la serie temporal.</p>
 <p><strong>QQ-plot</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
 <p>Se observa</p>
 <p><strong>Prueba de Shapiro-Wilks</strong></p>
 <pre><code>## 
@@ -264,10 +283,10 @@ div.csl-indent {
 ## W = 0.79869, p-value = 7.341e-08</code></pre>
 <p>Los residuos no siguen una distribución Normal.</p>
 <p><strong>Autocorrelacion</strong></p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-83-1.png" width="672" /></p>
 <p>El gráfico ACF de los residuos muestra que no hay autocorrelaciones significativas en los rezagos. Esto sugiere que los residuos son independientes en el tiempo, y por tanto, que el modelo ha logrado capturar adecuadamente la estructura temporal de la serie.</p>
 <p><strong>Homocedasticidad</strong> varianza constante</p>
-<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
+<p><img src="Analisis-Consumo-Agua_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
 <p>No se observa algun patron claro que indique que la varianza no sea constante, sin embargo se observa la presencia de valores atipicos.</p>
 <p>En este sentido ya que no se cumple la normalidad en los supuestos se debe tener cuidado con las inferencias que se realicen sobre este modelo, sin embargo no afecta la aplicación ni los pronósticos hechos por el modelo.</p>
 
